@@ -1,0 +1,8 @@
+---
+  - name: add redis ppa
+    apt_repository: repo='ppa:rwky/redis' state=present update_cache=yes
+
+  - name: install redis
+    apt: name=redis-server state=latest
+    notify:
+      - restart redis

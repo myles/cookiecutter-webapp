@@ -1,0 +1,26 @@
+{%- raw -%}
+---
+  - name: install packages
+    action: apt pkg={{ item }} state=latest
+    with_items:
+      - postgresql
+      - postgresql-contrib
+      - libpq-dev
+
+  - name: install python libraries
+    pip: name=psycopg2
+
+  - name: add postgres user to the admin group
+    user: name=postgres groups=admin append=yes
+
+  - name: update db configuration
+    template: src=postgresql.conf dest=/etc/postgresql/{{ postgres_version }}/main/postgresql.conf
+    notify:
+      - restart postgresql
+
+  - name: update client configuration
+    template: src=pg_hba.conf dest=/etc/postgresql/{{ postgres_version }}/main/pg_hba.conf
+    notify:
+      - restart postgresql
+
+{%- endraw -%}

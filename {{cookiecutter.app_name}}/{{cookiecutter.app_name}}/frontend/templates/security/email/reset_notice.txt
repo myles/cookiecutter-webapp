@@ -1,0 +1,7 @@
+{%- raw -%}
+Hey {{ user.first_name|title }} -
+{%- endraw -%}
+
+Just a heads up... Your password at {{ cookiecutter.project_name }} [{{ cookiecutter.app_url }}] has been changed.
+
+- {{ cookiecutter.company }}

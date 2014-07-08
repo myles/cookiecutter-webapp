@@ -1,0 +1,12 @@
+{
+	"app_name": "webapp",
+  "AppName": "WebApp",
+  "app_url": "https://webapp.ryanolson.me",
+	"project_name": "My Webapp",
+	"author": "Ryan Olson",
+	"email": "rmolson@gmail.com",
+  "company": "Quantum Coding LLC",
+  "copyright": "2013-2014, Quantum Coding LLC",
+  "license": "MIT",
+  "vagrant_ipv4": "192.168.100.10"
+}

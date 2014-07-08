@@ -1,0 +1,7 @@
+{%- raw -%}
+<p>Hola {{ user.first_name|title }},</p>
+
+<p>Please confirm your email through the link below:</p>
+
+<p><a href="{{ confirmation_link }}">{{ confirmation_link|safe }}</a></p>
+{%- endraw -%}

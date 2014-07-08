@@ -1,0 +1,11 @@
+{
+  "app_name": "{{ cookiecutter.app_name }}",
+  "AppName": "{{ cookiecutter.AppName }}",
+  "app_url": "{{ cookiecutter.app_url }}",
+  "project_name": "{{ cookiecutter.project_name }}",
+  "author": "{{ cookiecutter.author }}",
+  "email": "{{ cookiecutter.email }}",
+  "company": "{{ cookiecutter.company }}",
+  "copyright": "{{ cookiecutter.copyright }}",
+  "license": "{{ cookiecutter.license }}"
+}

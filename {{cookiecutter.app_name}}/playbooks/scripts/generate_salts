@@ -1,0 +1,18 @@
+#!/usr/bin/env python
+import base64
+import os
+import yaml
+
+keys = [
+    'secret_key',
+    'security_password_salt',
+    'security_confirm_salt',
+    'security_reset_salt',
+    'security_login_salt',
+    'security_remember_salt',
+]
+
+data = { key: base64.b64encode(os.urandom(32)).decode('utf-8') for key in keys }
+
+with open('vars/salts.yml', 'w') as outfile:
+    outfile.write(yaml.safe_dump(data, default_flow_style=False))

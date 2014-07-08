@@ -1,0 +1,14 @@
+{%- raw -%}
+<p>Hey {{ user.first_name|title }} -</p>
+{%- endraw -%}
+
+<p>Just a heads up... Your password at <a href="{{ cookiecutter.app_url }}">{{ cookiecutter.project_name }}</a> has been changed.</p>
+
+{%- raw -%}
+{% if security.recoverable %}
+<p>If you did not change your password, click the link below to reset it.</p>
+<p><a href="{{ url_for_security('forgot_password', _external=True) }}">Reset Password</a></p>
+{% endif %}
+{%- endraw -%}
+
+<p>- {{ cookiecutter.company }}</p>

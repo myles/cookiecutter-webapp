@@ -1,0 +1,6 @@
+---
+mail_server: smtp.{{ cookiecutter.app_name }}.com
+mail_username: username
+mail_password: password
+mail_port: 465
+mail_use_ssl: True

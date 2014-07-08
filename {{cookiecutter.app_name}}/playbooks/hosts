@@ -1,0 +1,2 @@
+[devservers]
+{{ cookiecutter.app_name }} ansible_ssh_host={{ cookiecutter.vagrant_ipv4 }}

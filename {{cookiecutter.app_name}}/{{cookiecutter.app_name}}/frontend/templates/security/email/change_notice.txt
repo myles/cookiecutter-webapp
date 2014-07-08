@@ -1,0 +1,14 @@
+{%- raw -%}
+Hey {{ user.first_name|title }} -
+{%- endraw -%}
+
+Just a heads up... Your password at {{ cookiecutter.project_name }} has been changed.
+
+{%- raw -%}
+{% if security.recoverable %}
+If you did not change your password, click the link below to reset it.
+{{ url_for_security('forgot_password', _external=True) }}
+{% endif %}
+{%- endraw -%}
+
+- {{ cookiecutter.company }}

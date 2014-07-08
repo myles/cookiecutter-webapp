@@ -1,0 +1,36 @@
+---
+- hosts: devservers
+  sudo: True
+
+  vars:
+    - app_debug: "True"
+    - app_instance_path: "/vagrant/instance"
+
+  vars_files:
+    - vars/common.yml
+    - vars/salts.yml
+    - vars/secure.yml
+
+  roles:
+    - python
+    - postgres
+    - redis
+
+{%- raw %}
+
+  tasks:
+    - name: create postgres user 
+      postgresql_user: user={{ app_name }}
+      sudo_user: postgres
+
+    - name: create postgres database
+      postgresql_db: name={{ app_name }} owner={{ app_name }}
+      sudo_user: postgres
+
+    - name: create instance directory
+      file: path={{ app_instance_path }} state=directory
+
+    - name: generate instance configuration
+      template: src=templates/settings.cfg 
+                dest={{ app_instance_path }}/settings.cfg
+{%- endraw %}

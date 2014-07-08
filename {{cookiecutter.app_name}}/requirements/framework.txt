@@ -1,0 +1,49 @@
+# Flask
+Flask>=0.10.1
+MarkupSafe>=0.21
+Werkzeug>=0.9.6
+Jinja2>=2.7.3
+itsdangerous>=0.24
+
+# Celery
+celery>=3.1.12
+
+# Database
+Flask-SQLAlchemy>=1.0
+SQLAlchemy>=0.9.4
+psycopg2>=2.5.2
+
+# Migrations
+Flask-Migrate>=1.0.0
+
+# Forms
+Flask-WTF>=0.9.5
+WTForms>=2.0
+
+# Assets
+Flask-Assets>=0.8
+cssmin>=0.1.4
+jsmin>=2.0.4
+
+# Views
+Flask-Classy>=0.6.10
+
+# Mail
+Flask-Mail>=0.9.0
+
+# Auth
+Flask-Security>=1.7.3
+passlib>=1.6.2
+py-bcrypt>=0.4
+
+# Caching
+Flask-Cache>=0.12
+
+# Management script
+Flask-Script>=2.0.5
+
+# Deployment
+wsgiref>=0.1.2
+
+# Error Handling
+raven>=5.0.0

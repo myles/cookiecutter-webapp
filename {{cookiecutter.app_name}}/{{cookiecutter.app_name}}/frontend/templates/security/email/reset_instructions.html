@@ -1,0 +1,11 @@
+{%- raw -%}
+<p>{{ user.first_name|title }},</p>
+{%- endraw -%}
+
+<p>Rumor has it you forgot your password for {{ cookiecutter.project_name }}.  No worries, here is your link to reset your password:</p>
+
+{%- raw -%}
+<p><a href="{{ reset_link }}">{{ reset_link|safe }}</a>.</p>
+{%- endraw -%}
+
+<p>- {{ cookiecutter.company }}</p>

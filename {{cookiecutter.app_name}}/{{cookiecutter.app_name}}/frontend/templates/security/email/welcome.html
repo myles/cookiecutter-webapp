@@ -1,0 +1,12 @@
+{%- raw -%}
+<p>Wahoo {{ user.first_name|title }}!</p>
+{%- endraw -%}
+
+<p>You just signing up for the <a href="{{ cookiecutter.app_url }}">{{ cookiecutter.project_name }}</a>... how sa'weet is that!</p>
+
+{%- raw -%}
+{% if security.confirmable %}
+<p>First things first... please confirm your email ({{ user.email|lower }}) through the link below:</p>
+<p><a href="{{ confirmation_link }}">Confirm my account</a>.</p>
+{% endif %}
+{%- endraw -%}

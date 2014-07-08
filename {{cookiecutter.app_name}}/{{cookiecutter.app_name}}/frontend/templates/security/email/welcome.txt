@@ -1,0 +1,12 @@
+{%- raw -%}
+Wahoo {{ user.first_name|title }}!!
+{%- endraw -%}
+
+You just signing up for the {{ cookiecutter.project_name }} at {{ cookiecutter.app_url }} ... how sa'weet is that!
+
+{%- raw -%}
+{% if security.confirmable %}
+First things first... Please confirm your email ({{ user.email|lower }}) through the link below:
+{{ confirmation_link }}
+{% endif %}
+{%- endraw -%}
