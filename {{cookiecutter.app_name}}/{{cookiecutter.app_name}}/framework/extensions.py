@@ -6,7 +6,7 @@
     Each extension is initialized in the app factory.
 
     :author: {{ cookiecutter.author }}
-    :copyright: (c) {{ cookiecutter.copyright }}
+    :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
 from flask.ext.sqlalchemy import SQLAlchemy

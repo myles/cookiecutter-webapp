@@ -4,7 +4,7 @@
     {{ "~" * "tasks"|count }}
 
     :author: {{ cookiecutter.author }}
-    :copyright: (c) {{ cookiecutter.copyright }}
+    :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
 from workq import celery

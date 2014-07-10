@@ -4,7 +4,7 @@
     {{ "~" * "frontend.views.checklist"|count }}
 
     :author: {{ cookiecutter.author }}
-    :copyright: (c) {{ cookiecutter.copyright }}
+    :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
 from flask import render_template #, redirect, current_app, url_for, request
