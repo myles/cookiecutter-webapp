@@ -7,9 +7,9 @@
     :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
-from .checklist import ChecklistView
 from .legal import LegalView
+from .todo import TodoView
 
 def init_app(app):
-    ChecklistView.register(app)
     LegalView.register(app)
+    TodoView.register(app)

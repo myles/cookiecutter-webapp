@@ -1,17 +1,18 @@
-{                                                                                                             
+{
   "name": "{{ cookiecutter.app_name }}",
   "dependencies": {
     "backbone": "",
     "bootstrap": "~3",
-    "jquery": "",
-    "pjax": "",
-    "requirejs": "",
-    "underscore": "",
-    "respond": "",
-    "html5shiv": "",
-    "modernizr": "",
-    "html5-boilerplate": "",
     "font-awesome": "",
+    "html5-boilerplate": "",
+    "html5shiv": "",
+    "lodash": "~2.4.1",
+    "jquery": "",
+    "modernizr": "",
+    "pjax": "",
+    "react": "",
+    "requirejs": "",
+    "respond": "",
     "zeroclipboard": ""
   }
 }

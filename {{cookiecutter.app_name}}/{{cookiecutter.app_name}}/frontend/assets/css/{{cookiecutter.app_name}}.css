@@ -1,24 +1,23 @@
-/* 
+/** 
  * Sticky footer 
- * http://twitter.github.io/bootstrap/examples/sticky-footer.html
- * http://getbootstrap.com/examples/sticky-footer/
- * */
+ * http://getbootstrap.com/examples/sticky-footer-navbar/
+ **/
 
-html,
-body {
-    height: 100%;
-}
-#wrap {
+html {
+    position: relative;
     min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -60px;
-    padding: 0 0 60px;
 }
-#footer {
+body {
+    margin-bottom; 60px;
+}
+body > .container {
+    padding: 60px 15px 60px;
+}
+footer {
     height: 60px;
-}
-#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
     background-color: #f5f5f5;
     text-align: center;
 }

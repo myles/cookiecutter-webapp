@@ -6,6 +6,7 @@ import subprocess
 from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 
+from {{cookiecutter.app_name}}.api import init_api
 from {{cookiecutter.app_name}}.frontend import create_app
 from {{cookiecutter.app_name}}.framework.sql import db
 from {{cookiecutter.app_name}}.models.users import User
@@ -13,6 +14,7 @@ from {{cookiecutter.app_name}}.models.users import User
 from worker import Worker
 
 app = create_app()
+api = init_api(app)
 
 manager = Manager(app)
 TEST_CMD = "py.test tests"

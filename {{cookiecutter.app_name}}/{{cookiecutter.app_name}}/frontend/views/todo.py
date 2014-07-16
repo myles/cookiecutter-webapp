@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    frontend.views.checklist
-    {{ "~" * "frontend.views.checklist"|count }}
+    frontend.views.todo
+    {{ "~" * "frontend.views.todo"|count }}
 
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}
@@ -18,13 +18,13 @@ from werkzeug.local import LocalProxy
 _security = LocalProxy(lambda: current_app.extensions['security'])
 # _social = LocalProxy(lambda: current_app.extensions['social'])
 
-class ChecklistView(FlaskView):
+class TodoView(FlaskView):
     route_base = '/'
 
     def index(self):
-        return render_template("views/checklist/index.html")
+        return render_template("views/todo/index.html")
 
     @login_required
     def secret(self):
         flash("super secret message", category='info')
-        return render_template("views/checklist/index.html")
+        return render_template("views/todo/index.html")

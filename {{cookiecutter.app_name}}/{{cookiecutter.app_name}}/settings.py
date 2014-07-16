@@ -14,6 +14,7 @@ SECRET_KEY = 'super secret key - override with instance configuration'
 
 # Framework
 USE_CDN = False
+USE_PJAX = False
 
 # Database / Flask-SQLAlchemy
 SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/{{ cookiecutter.app_name }}.db"

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-                                                                                       
+# -*- coding: utf-8 -*-
 """
     api
     ~~~
@@ -7,22 +7,16 @@
     :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
-from flask import Blueprint
+from flask.ext.restful import Api
 
-from ..framework.core import (
-    {{ cookiecutter.AppName }}Error,
-    {{ cookiecutter.AppName }}FormError,
-)
+from .tasks import Tasks
 
-api = Blueprint('api', __name__)
 
 def init_api(app, url_prefix=None, subdomain=None):
-    """Initialize API blueprint"""
+    """Initialize API to an application"""
+    api = Api(app, prefix='/api')
 
-    # API blueprint error handlers
-    api.errorhandler({{ cookiecutter.AppName }}Error)(on_error)
-    api.errorhandler({{ cookiecutter.AppName }}FormError)(on_form_error)
-    api.errorhandler(404)(on_404)
+    # Map API Resources to Endpoints
+    api.add_resource(Tasks, '/tasks', endpoint='tasks_api')
 
-    app.json_encoder = JSONEncoder
-    app.register_blueprint(api, url_prefix=url_prefix, subdomain=subdomain)
+    return api

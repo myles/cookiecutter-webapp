@@ -62,6 +62,9 @@ Inspiration
 - `cookiecutter-flask <https://github.com/sloria/cookiecutter-flask/>`_ by Steven Loria
 - `Flask Official Documentation <http://flask.pocoo.org/docs/>`_
 
+Optimization
+------------
+- `Optimizing RequireJS applications <http://www.webdeveasy.com/optimize-requirejs-projects/>`_
 
 License
 -------

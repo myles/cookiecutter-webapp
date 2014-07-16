@@ -20,6 +20,10 @@ Flask-Migrate>=1.0.0
 Flask-WTF>=0.9.5
 WTForms>=2.0
 
+# API
+Flask-RESTful>=0.2.12
+Flask-Restless>=0.13.1
+
 # Assets
 Flask-Assets>=0.8
 cssmin>=0.1.4
