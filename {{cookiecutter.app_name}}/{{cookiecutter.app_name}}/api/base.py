@@ -4,38 +4,24 @@
     {{ "~" * "api.base"|count }}
 
     :author: {{ cookiecutter.author }}
-    :copyright: © {{ cookiecutter.copyright }}
+    :copyright: (c) {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
-from flask.ext.classy import FlaskView
+from flask.ext.restful import reqparse
 
-class APIView(FlaskView):
+get_parser = reqparse.RequestParser()
+get_parser.add_argument('fields', type=str, location='args', store='append')
+get_parser.add_argument('page', type=int, location='args')
+get_parser.add_argument('per_page', type=int, location='args')
+get_parser.add_argument('ETag', type=str, location='headers')
 
-    model = None
-    create_form = None
-    update_form = None
+def etag():
+    """
+    Calculate an ETag value for the data being returned,  Next, check for
+    the existance of an If-None-Match header.  If the ETag values matchs
+    the value of If-None-Match, return and empty payload with a 304 code.
+    Otherwise, add the Etag header to the response.
+    """
+    pass
 
-    def list(self):
-        return self.model.all()
-
-    def create(self):
-        form = self.create_form()
-        if form.validate_on_submit():
-            return self.model.create(**request.json), 201
-        raise Exception
-
-    def delete(self, id):
-        self.model.get_or_404(id).delete()
-        return None, 204
-
-    def patch(self, id):
-        return self.update(id)
-
-    def show(self, id):
-        return self.model.get_or_404(id)
-
-    def update(self, id):
-        form = self.update_form()
-        if form.validate_on_submit():
-            return self.model.get_or_404(id).update(**request.json)
 

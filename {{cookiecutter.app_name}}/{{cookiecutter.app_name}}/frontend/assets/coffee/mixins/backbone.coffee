@@ -8,10 +8,6 @@ define ['module'], (module) ->
 
     componentWillUnmount: ->
       for collection in @getBackboneCollections()
-        collection.off null, null, @
-
-    getBackboneCollections: ->
-      console.log "override this function in the mixed object"
-      undefined
+        collection.off(null, null, @)
 
   module.exports = BackboneMixin

@@ -1,5 +1,6 @@
 {%- raw -%}
 {% extends "layouts/pjax.html" %}
+{% import "macros/js.html" as js %}
 
 {% block h5bp_css %}
   {% assets "h5bp_css" %}<link rel="stylesheet" href="{{ ASSET_URL }}">{% endassets %}
@@ -27,9 +28,9 @@
 {% endblock %}
 
 {% block h5bp_body_js %}
-  {% assets "h5bp_body_js" -%}
-  <script data-main={{ url_for('static', filename='js/config.js') }} src="{{ ASSET_URL }}"></script>
-  {%- endassets %}
+  {% block requirejs -%}
+    {{ js.require() }}
+  {%- endblock %}
   {% block js %}{% endblock %}
 {% endblock %}
 {%- endraw -%}

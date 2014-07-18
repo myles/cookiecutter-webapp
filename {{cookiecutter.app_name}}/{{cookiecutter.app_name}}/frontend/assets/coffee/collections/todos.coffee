@@ -1,8 +1,10 @@
-define ['backbone', 'models/todo', 'module'], (Backbone, Todo, module) ->
+define ['collections/base', 'models/todo', 'module'], (BaseCollection, Todo, module) ->
 
-  Todos = Backbone.Collection.extend
+  Todos = BaseCollection.extend
     
     model: Todo
+
+    url: '/api/todos'
 
     completed: ->
       @where completed: true

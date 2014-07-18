@@ -12,9 +12,63 @@
 """
 from . import core
 from .extensions import db
+from flask.ext.restless.helpers import to_dict as restless_to_dict
 
 
-class CRUDMixin(object):
+class JSONMixin(core.JSONMixin):
+
+    def to_dict(self, deep=None, exclude=None, include=None,
+                include_methods=None, **kwargs):
+        """
+        Call flask.ext.restless.helper.to_dict method on self.
+
+        Returns a dictionary representing the fields of the specified `instance`
+        of a SQLAlchemy model.
+
+        The returned dictionary is suitable as an argument to
+        :func:`flask.jsonify`; :class:`datetime.date` and :class:`uuid.UUID`
+        objects are converted to string representations, so no special JSON
+        encoder behavior is required.
+
+        `deep` is a dictionary containing a mapping from a relation name (for a
+        relation of `instance`) to either a list or a dictionary. This is a
+        recursive structure which represents the `deep` argument when calling
+        :func:`!_to_dict` on related instances. When an empty list isencountered,
+        :func:`!_to_dict` returns a list of the string representations of the
+        related instances.
+
+        If either `include` or `exclude` is not ``None``, exactly one of them must
+        be specified. If both are not ``None``, then this function will raise a
+        :exc:`ValueError`. `exclude` must be a list of strings specifying the
+        columns which will *not* be present in the returned dictionary
+        representation of the object (in other words, it is a
+        blacklist). Similarly, `include` specifies the only columns which will be
+        present in the returned dictionary (in other words, it is a whitelist).
+
+        .. note::
+
+           If `include` is an iterable of length zero (like the empty tuple or the
+           empty list), then the returned dictionary will be empty. If `include`
+           is ``None``, then the returned dictionary will include all columns not
+           excluded by `exclude`.
+
+        `include_relations` is a dictionary mapping strings representing relation
+        fields on the specified `instance` to a list of strings representing the
+        names of fields on the related model which should be included in the
+        returned dictionary; `exclude_relations` is similar.
+
+        `include_methods` is a list mapping strings to method names which will
+        be called and their return values added to the returned dictionary.
+        """
+        # todo: incorporate the following, by calculating the value of deep
+        #       based off of includes and excludes
+        # https://github.com/jfinkels/flask-restless/blob/5edd8caf7adc7eae6277a578a5386a0461b2d115/flask_restless/views.py#L872
+        return restless_to_dict(self, deep=deep, exclude=exclude,
+                                include=include,
+                                include_methods=include_methods, **kwargs)
+
+
+class CRUDMixin(core.CRUDMixin):
     """Mixin that adds convenience methods for CRUD (create, read, update, delete)
     operations.
     """
@@ -118,7 +172,7 @@ class PrimaryKeyMixin(object):
     id = db.Column(db.Integer, primary_key=True)
 
 
-class Model(PrimaryKeyMixin, CRUDMixin, ServiceMixin, db.Model):
+class Model(PrimaryKeyMixin, CRUDMixin, ServiceMixin, JSONMixin, db.Model):
     """Base model class that includes CRUD convenience methods."""
     __abstract__ = True
 

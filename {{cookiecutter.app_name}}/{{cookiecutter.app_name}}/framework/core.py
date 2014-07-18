@@ -22,6 +22,12 @@ class {{ cookiecutter.AppName }}FormError(Exception):
         self.errors = errors
 
 
+class JSONMixin(object):
+
+    def to_dict(self, deep=None, exclude=None, include=None, **kwargs):
+        raise NotImplementedError
+
+
 class CRUDMixin(object):
     """Mixin that adds convenience methods for CRUD (create, read, update, delete)
     operations.  Also new and patch.

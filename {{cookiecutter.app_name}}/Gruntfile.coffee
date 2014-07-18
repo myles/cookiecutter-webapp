@@ -37,7 +37,7 @@ module.exports = (grunt) ->
           '{{ cookiecutter.app_name }}/frontend/assets/coffee/**/*.coffee',
           '{{ cookiecutter.app_name }}/frontend/assets/coffee/**/*.cjsx',
         ]
-        tasks: 'coffee:app'
+        tasks: ['coffee:app', 'cjsx:app']
 
     # copy bower components to the frontend's static directory
     bowercopy:
@@ -54,7 +54,7 @@ module.exports = (grunt) ->
           'js/vendor/modernizr.js': 'modernizr/modernizr.js'
           'js/vendor/plugins.js': 'html5-boilerplate/js/plugins.js'
           'js/vendor/pjax.js': 'pjax/src/pjax.js'
-          'js/vendor/react.js': 'react/react.js'
+          'js/vendor/react.js': 'react/react-with-addons.js'
           'js/vendor/require.js': 'requirejs/require.js'
           'js/vendor/respond.js': 'respond/dest/respond.src.js'
           'js/vendor/zeroclipboard.js': 'zeroclipboard/dist/ZeroClipboard.js'
@@ -72,6 +72,7 @@ module.exports = (grunt) ->
 
   grunt.loadNpmTasks 'grunt-bowercopy'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
+  grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-coffee-react'
 
   grunt.registerTask 'default', ['bowercopy', 'coffee', 'cjsx']

@@ -10,19 +10,37 @@ define ['react', 'module'], (React, module) ->
       editText: @props.todo.get 'title'
 
     handleSubmit: ->
-      console.log "handleSubmit called"
+      val = @state.editText.trim()
+      if val
+        @props.onSave val
+        @setState editText: val
+      else
+        @props.onDestroy()
+      false
 
     handleEdit: ->
-      console.log "handleEdit called"
+      enableInput = =>
+        node = @refs.editField.getDOMNode()
+        node.focus()
+        node.setSelectionRange(node.value.length, node.value.length)
+      @props.onEdit enableInput
+      @setState editText: @props.todo.get('title')
 
     handleKeyDown: ->
-      console.log "handleKeyDown called"
+      if event.which == ESCAPE_KEY
+        @setState editText: @props.todo.get('title')
+        @props.onCancel()
+      else if event.which == ENTER_KEY
+        @handleSubmit()
 
     handleChange: ->
-      console.log "handleChange called"
+      @setState editText: event.target.value
 
     render: ->
-      <li className={React.addons.classSet completed: @props.todo.get('completed') editing: @props.editting}>
+      <li className={React.addons.classSet
+        completed: @props.todo.get('completed')
+        editing: @props.editing
+      }>
         <div className="view">
           <input
             className="toggle"

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    models.template
-    ~~~~~~~~~~~~~~~
+    models.todos
+    ~~~~~~~~~~~~
 
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}
@@ -10,14 +10,16 @@
 from ..framework.sql import (
     db,
     Model,
-    JsonSerializer,
     ReferenceColumn,
 )
 
 
-class Template(TemplateJsonSerializer, Model):
+class Todo(Model):
 
-    __tablename__ = "templates"
+    __tablename__ = "todos"
 
-    user_id = ReferenceColumn("users")
-    user = db.relationship("User")
+    title = db.Column(db.String(128), nullable=False)
+    completed = db.Column(db.Boolean, default=False)
+
+#   user_id = ReferenceColumn("users")
+#   user = db.relationship("User")

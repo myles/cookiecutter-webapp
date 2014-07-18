@@ -1,7 +1,7 @@
-define ['backbone', 'module'], (Backbone, module) ->
+define ['models/base', 'module'], (BaseModel, module) ->
 
-  Todo = Backbone.Model.extend
-
+  Todo = BaseModel.extend
+    
     default:
       title: ''
       completed: false

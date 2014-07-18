@@ -18,13 +18,13 @@ from werkzeug.local import LocalProxy
 _security = LocalProxy(lambda: current_app.extensions['security'])
 # _social = LocalProxy(lambda: current_app.extensions['social'])
 
-class TodoView(FlaskView):
+class TodosView(FlaskView):
     route_base = '/'
 
     def index(self):
-        return render_template("views/todo/index.html")
+        return render_template("views/todos/index.html")
 
     @login_required
     def secret(self):
         flash("super secret message", category='info')
-        return render_template("views/todo/index.html")
+        return render_template("views/todos/index.html")

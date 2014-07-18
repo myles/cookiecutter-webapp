@@ -1,5 +1,4 @@
-define ['backbone', 'react', 'mixins/backbone', 'views/todoItem', 'module'],
-  (Backbone, React, BackboneMixin, TodoItem, module) ->
+define ['backbone', 'react', 'mixins/backbone', 'views/todoItem', 'module'], (Backbone, React, BackboneMixin, TodoItem, module) ->
 
   TodoList = React.createClass
 
@@ -7,54 +6,69 @@ define ['backbone', 'react', 'mixins/backbone', 'views/todoItem', 'module'],
 
     getBackboneCollections: -> [ @props.todos ]
 
-    getInitialState: -> editing: null
+    getInitialState: ->
+      editing: null
+      nowShowing: 'all'
 
-#   componentDidMount: ->
-#     Router = Backbone.Router.extend
-#       routes:
-#         "": "all"
-#         "active": "active"
-#         "completed": "completed"
-#       all: @setState.bind @ nowShowing: 'all'
-#       active: @setState.bind @ nowShowing: 'active'
-#       completed: @setState.bind @ nowShowing: 'completed'
-#     router = new Router
-#     Backbone.history.start
-#     @props.todos.fetch
+    componentDidMount: ->
+      Router = Backbone.Router.extend
+        routes:
+          "": "all"
+          "active": "active"
+          "completed": "completed"
+        all: @setState.bind(@, nowShowing: 'all')
+        active: @setState.bind(@, nowShowing: 'active')
+        completed: @setState.bind(@, nowShowing: 'completed')
+      router = new Router()
+      Backbone.history.start()
+      @props.todos.fetch()
 
     handleNewTodoKeyDown: (event) ->
-      console.log "KeyPressed ", + event.which
-
+      if event.which != 13
+        return
+      val = @refs.newField.getDOMNode().value.trim()
+      if val
+        @props.todos.create
+          title: val
+          completed: false
+        @refs.newField.getDOMNode().value = ''
+      return false
 
     toggleAll: ->
       console.log "toggleAll called"
 
     edit: (todo, callback) ->
-      @setState editing: todo.get('id') callback
+      @setState(editing: todo.get('id'), callback)
 
     save: (todo, text) ->
-      todo.save title: text
+      if todo.get('title') != text
+        todo.save title: text
       @setState editing: null
 
-    cancel:
+    cancel: ->
       @setState editing: null
 
     clearCompleted: ->
       todo.destroy for todo in @props.todos.completed()
 
     render: ->
-      console.log @props.todos
-
-      visibleTodos = @props.todos.filter (todo) ->
+      visibleTodos = @props.todos.filter (todo) =>
         switch @state.nowShowing
           when 'active' then return !todo.get('completed')
           when 'completed'then return todo.get('completed')
           else return true
 
-      console.log visibleTodos
-
-      todoItems = (<TodoItem key={todo.get('id')} todo={todo} /> \
-        for todo in @props.todos)
+      todoItems = @props.todos.map (todo) =>
+        <TodoItem 
+          key={todo.get('id')} 
+          todo={todo}
+          editing={@state.editing == todo.get('id')}
+          onToggle={todo.toggle.bind(todo)}
+          onDestroy={todo.destroy.bind(todo)}
+          onEdit={@edit.bind(@, todo)}
+          onSave={@save.bind(@, todo)}
+          onCancel={@cancel}
+        />
 
       if @props.todos.length
         main = (
@@ -81,8 +95,7 @@ define ['backbone', 'react', 'mixins/backbone', 'views/todoItem', 'module'],
             autoFocus={true}
           />
         </header>
-        {body}
-        {footer}
+        {main}
       </div>
 
   module.exports = TodoList

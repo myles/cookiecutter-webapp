@@ -2,13 +2,13 @@ require.config {
   baseURL: 'static/js'
   paths:
     jquery: 'vendor/jquery'
-    lodash: 'vendor/underscore'
+    underscore: 'vendor/lodash'
     backbone: 'vendor/backbone'
     bootstrap: 'vendor/bootstrap'
     react: 'vendor/react'
   shim:
     backbone:
-      deps: ['lodash, jquery']
+      deps: ['underscore', 'jquery']
       exports: 'Backbone'
     bootstrap:
       deps: ['jquery']
