@@ -7,18 +7,31 @@ define ['backbone', 'module'], (Backbone, module) ->
   # See: http://jsfiddle.net/Ewg7q/1/
 
   class Collection extends Backbone.Collection
+
     initialize: (@etag) ->
+      super
+
     fetch: (options) ->
       setRequestHeader = (xhr, settings) =>
         xhr.setRequestHeader('If-None-Match', @etag) if this?.etag
+        xhr.setRequestHeader('If-None-Match', 'bambam')
+        xhr.setRequestHeader('If-Modified', 'bambam')
       setEtagFromResponse = (xhr, text_status) =>
         @etag = xhr.getResponseHeader 'ETag'
       super
         beforeSend: (xhr, settings) ->
           setRequestHeader xhr, settings
           options?.beforeSend xhr, settings
+        success: (resp) ->
+          console.log "fetch success called"
         complete: (xhr, text_status) ->
+          console.log "fetch completed"
           setEtagFromResponse xhr, text_status
           options?.complete xhr, text_status
+        ifModified: true
+
+    _reset: ->
+      super
+      @etag = undefined
 
   module.exports = Collection

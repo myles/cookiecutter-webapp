@@ -7,18 +7,5 @@ define ['backbone', 'module'], (Backbone, module) ->
   # See: http://jsfiddle.net/Ewg7q/1/
 
   class Model extends Backbone.Model
-    initialize: (@etag) ->
-    fetch: (options) ->
-      setRequestHeader = (xhr, settings) =>
-        xhr.setRequestHeader('If-None-Match', @etag) if this?.etag
-      setEtagFromResponse = (xhr, text_status) =>
-        @etag = xhr.getResponseHeader 'ETag'
-      super
-        beforeSend: (xhr, settings) ->
-          setRequestHeader xhr, settings
-          options?.beforeSend xhr, settings
-        complete: (xhr, text_status) ->
-          setEtagFromResponse xhr, text_status
-          options?.complete xhr, text_status
 
   module.exports = Model

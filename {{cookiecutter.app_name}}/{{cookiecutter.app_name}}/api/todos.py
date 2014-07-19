@@ -48,6 +48,7 @@ class Todo(Resource):
 class Todos(Resource):
 
     def get(self):
+        return '', 304, [('ETag', 'bambam')] 
         return [todo.to_dict() for todo in TodoModel.all()], 200, [('ETag', 'bam bam')] 
 
     def post(self):
