@@ -9,33 +9,33 @@ module.exports = (grunt) ->
       app:
         expand: true
         src: ['**/*.coffee']
-        cwd: '{{ cookiecutter.app_name }}/frontend/assets/coffee'
+        cwd: '{{ cookiecutter.app_name }}/frontend/client/coffee'
         dest: '{{ cookiecutter.app_name }}/frontend/static/js/'
         ext: '.js'
         options:
           bare: false
           preserve_dirs: true
-          base_path: '{{ cookiecutter.app_name }}/frontend/assets/coffee'
+          base_path: '{{ cookiecutter.app_name }}/frontend/client/coffee'
 
     # compile coffee-react source files
     cjsx:
       app:
         expand: true
         src: ['**/*.cjsx']
-        cwd: '{{ cookiecutter.app_name }}/frontend/assets/coffee'
+        cwd: '{{ cookiecutter.app_name }}/frontend/client/coffee'
         dest: '{{ cookiecutter.app_name }}/frontend/static/js'
         ext: '.js'
         options:
           base: false
           preserve_dirs: true
-          base_path: '{{ cookiecutter.app_name }}/frontend/assets/coffee'
+          base_path: '{{ cookiecutter.app_name }}/frontend/client/coffee'
 
     # watch for file changes and react
     watch:
       app:
         files: [
-          '{{ cookiecutter.app_name }}/frontend/assets/coffee/**/*.coffee',
-          '{{ cookiecutter.app_name }}/frontend/assets/coffee/**/*.cjsx',
+          '{{ cookiecutter.app_name }}/frontend/client/coffee/**/*.coffee',
+          '{{ cookiecutter.app_name }}/frontend/client/coffee/**/*.cjsx',
         ]
         tasks: ['coffee:app', 'cjsx:app']
 

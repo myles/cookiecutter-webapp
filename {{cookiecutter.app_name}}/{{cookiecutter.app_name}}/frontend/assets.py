@@ -11,7 +11,7 @@ import os
 from flask.ext.assets import Bundle, Environment
 
 root_directory = os.path.dirname(os.path.abspath(__file__))
-assets_directory = os.path.join(root_directory, 'assets')
+assets_directory = os.path.join(root_directory, 'client')
 bower_directory = os.path.join(root_directory, 'static')
 
 h5bp_css = Bundle(
