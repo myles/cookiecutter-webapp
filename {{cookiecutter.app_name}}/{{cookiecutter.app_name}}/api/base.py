@@ -7,21 +7,38 @@
     :copyright: (c) {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
-from flask.ext.restful import reqparse
+import functools
+from flask import request
+from flask.ext.restful import Api as BaseAPI
+from flask.ext.restful import reqparse, types
 
-get_parser = reqparse.RequestParser()
-get_parser.add_argument('fields', type=str, location='args', store='append')
-get_parser.add_argument('page', type=int, location='args')
-get_parser.add_argument('per_page', type=int, location='args')
-get_parser.add_argument('ETag', type=str, location='headers')
+#get_parser = reqparse.RequestParser()
+#get_parser.add_argument('fields', type=str, location='args', store='append')
+#get_parser.add_argument('page', type=int, location='args')
+#get_parser.add_argument('per_page', type=int, location='args')
+#get_parser.add_argument('ETag', type=str, location='headers')
 
-def etag():
+resp_parser = reqparse.RequestParser()
+resp_parser.add_argument('X-Conditional',
+                         type=types.boolean, location='headers')
+
+
+class API(BaseAPI):
     """
-    Calculate an ETag value for the data being returned,  Next, check for
-    the existance of an If-None-Match header.  If the ETag values matchs
-    the value of If-None-Match, return and empty payload with a 304 code.
-    Otherwise, add the Etag header to the response.
+    Extend Flask-RESTful to play nicely with conditional requests.
     """
-    pass
 
-
+    def make_response(self, data, *args, **kwargs):
+        """
+        If the X-Conditional header evaluates to True, then return a
+        conditional GET response, which will return a 304 - Not Modified if the
+        ETag in the response matches any of the values in the If-None-Match
+        request header, otherwise return the default response.
+        """
+        resp = super(API, self).make_response(data, *args, **kwargs)
+        args = resp_parser.parse_args()
+        if request.method == 'GET':
+            resp.add_etag()
+        if args.get('X-Conditional'):
+            return resp.make_conditional(request)
+        return resp

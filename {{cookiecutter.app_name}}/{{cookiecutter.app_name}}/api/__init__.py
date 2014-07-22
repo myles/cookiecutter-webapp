@@ -8,8 +8,8 @@
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
 from flask import Blueprint, jsonify
-from flask.ext.restful import Api
 
+from .base import API
 from .exceptions import APIError
 from .todos import Todo, Todos
 
@@ -25,7 +25,7 @@ def init_api(app):
     api_blueprint.errorhandler(APIError)(on_error)
 
     # Initialize Flask-RESTFul extensions on the API blueprint
-    api = Api(api_blueprint)
+    api = API(api_blueprint)
 
     # Map API Resources to Endpoints
     api.add_resource(Todos, '/todos', endpoint='todos_api')

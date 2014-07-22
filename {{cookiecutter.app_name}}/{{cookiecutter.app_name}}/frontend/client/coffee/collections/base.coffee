@@ -12,23 +12,26 @@ define ['backbone', 'module'], (Backbone, module) ->
       super
 
     fetch: (options) ->
-      setRequestHeader = (xhr, settings) =>
+      options = _.clone(options ? {})
+      beforeSend = options?.beforeSend
+      options.beforeSend = (xhr) =>
         xhr.setRequestHeader('If-None-Match', @etag) if this?.etag
-        xhr.setRequestHeader('If-None-Match', 'bambam')
-        xhr.setRequestHeader('If-Modified', 'bambam')
-      setEtagFromResponse = (xhr, text_status) =>
+        xhr.setRequestHeader('X-Conditional', true)
+        beforeSend?(arguments)
+      success = options?.success
+      options.success = (resp, status, xhr) =>
+        method = if options?.reset then 'reset' else 'set'
+        @[method](resp, options) if xhr.status != 304
+        success?(@, arguments)
+      complete = options?.complete
+      options.complete = (xhr, status) =>
         @etag = xhr.getResponseHeader 'ETag'
-      super
-        beforeSend: (xhr, settings) ->
-          setRequestHeader xhr, settings
-          options?.beforeSend xhr, settings
-        success: (resp) ->
-          console.log "fetch success called"
-        complete: (xhr, text_status) ->
-          console.log "fetch completed"
-          setEtagFromResponse xhr, text_status
-          options?.complete xhr, text_status
-        ifModified: true
+        complete?(arguments)
+      error = options?.error
+      options.error = (resp) =>
+        error?(@, resp, options)
+        @trigger?('error', @, resp, options)
+      @sync('read', @, options)
 
     _reset: ->
       super
