@@ -11,6 +11,7 @@ from flask.ext.login import login_required
 from flask.ext.restful import Resource, reqparse
 from flask.ext.restful import fields, types
 
+from .base import BaseAPI
 from ..models.todos import Todo as TodoModel
 
 req_parser = reqparse.RequestParser()
@@ -55,3 +56,9 @@ class Todos(Resource):
         data = req_parser.parse_args()
         todo = TodoModel.create(**data)
         return todo.to_dict(), 201
+
+
+class TasksAPI(BaseAPI):
+
+    def index(self):
+        return [todo.to_dict() for todo in TodoModel.all()]

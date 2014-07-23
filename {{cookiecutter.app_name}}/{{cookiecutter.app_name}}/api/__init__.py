@@ -7,31 +7,33 @@
     :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
-from flask import Blueprint, jsonify
+from flask import Blueprint
 
-from .base import API
+from .base import ClassyAPI
 from .exceptions import APIError
-from .todos import Todo, Todos
+from .todos import Todo, Todos, TasksAPI
 
 
 def init_api(app):
     """Initialize API to an application"""
-    url_prefix = '/api'
 
     # Create a versioned API blueprint
-    api_blueprint = Blueprint(url_prefix,  __name__, url_prefix=url_prefix)
+    api_blueprint = Blueprint("api",  __name__)
 
     # Register errorhandlers
-    api_blueprint.errorhandler(APIError)(on_error)
+    # api_blueprint.errorhandler(APIError)(on_error)
 
     # Initialize Flask-RESTFul extensions on the API blueprint
-    api = API(api_blueprint)
+    api = ClassyAPI(app)
 
-    # Map API Resources to Endpoints
-    api.add_resource(Todos, '/todos', endpoint='todos_api')
-    api.add_resource(Todo, '/todos/<int:todo_id>', endpoint='todo_api')
+    # Add Flask-RESTFul Resources
+    api.add_resource(Todos, '/api/todos', endpoint='todos_api')
+    api.add_resource(Todo, '/api/todos/<int:todo_id>', endpoint='todo_api')
 
-    app.register_blueprint(api_blueprint, url_prefix=url_prefix)
+    # Add Flask-Classy Resources
+    TasksAPI.register(api_blueprint)
+
+    app.register_blueprint(api_blueprint, url_prefix='/api')
     return api
 
 
