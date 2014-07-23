@@ -16,29 +16,25 @@ from .todos import Todo, Todos, TasksAPI
 
 def init_api(app):
     """Initialize API to an application"""
+    url_prefix = '/api'
 
-    # Create a versioned API blueprint
-    api_blueprint = Blueprint("api",  __name__)
-
-    # Register errorhandlers
-    # api_blueprint.errorhandler(APIError)(on_error)
-
-    # Initialize Flask-RESTFul extensions on the API blueprint
+    # Initialize Flask-RESTful extensions on the Flask application.
+    # We are using Flask-RESTful primarily for the excellent error
+    # handling and reqparse features.
     api = ClassyAPI(app)
 
     # Add Flask-RESTFul Resources
-    api.add_resource(Todos, '/api/todos', endpoint='todos_api')
-    api.add_resource(Todo, '/api/todos/<int:todo_id>', endpoint='todo_api')
+    api.add_resource(Todos, url_prefix + '/todos', endpoint='todos_api')
+    api.add_resource(Todo, url_prefix + '/todos/<int:id>', endpoint='todo_api')
+
+    # Create an API blueprint for ClassyAPI views
+    # Note: Use multiple blueprints for API versions
+    api_v1 = Blueprint("api_v1",  __name__)
 
     # Add Flask-Classy Resources
-    TasksAPI.register(api_blueprint)
+    TasksAPI.register(api_v1)
 
-    app.register_blueprint(api_blueprint, url_prefix='/api')
+    # Register API blueprints with the Flask application
+    app.register_blueprint(api_v1, url_prefix='/api')
+
     return api
-
-
-def on_error(e):
-    if isinstance(e, APIError):
-        return jsonify(e.to_dict()), e.http_error_code
-    return jsonify(
-        APIError(500, 911, message="Unknown error raised").to_dict()), 500
