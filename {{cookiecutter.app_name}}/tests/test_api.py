@@ -39,13 +39,13 @@ class TestAPI:
         resp = app_api.get("/api/non-existent-path?envelope=true", expect_errors=True)
         assert resp.status_code == 200
         assert resp.json['status'] == 404
-        assert 'Not Found' in resp.json['response']['message']
+        assert 'Not Found' in resp.json['data']['message']
 
     def test_not_found_with_callback(self, app_api):
         resp = app_api.get("/api/non-existent-path?callback=myfunc", expect_errors=True)
         assert resp.status_code == 200
         assert resp.json['status'] == 404
-        assert 'Not Found' in resp.json['response']['message']
+        assert 'Not Found' in resp.json['data']['message']
 
     def test_todos_index(self, todos, app_api):
         resp = app_api.get("/api/tests/todos")
@@ -94,5 +94,5 @@ class TestAPI:
         resp = app_api.get("/api/tests/todos?envelope=true")
         assert isinstance(resp.json, dict)
         assert resp.json['status'] == resp.status_code
-        assert len(resp.json['response']) == 2
+        assert len(resp.json['data']) == 2
 

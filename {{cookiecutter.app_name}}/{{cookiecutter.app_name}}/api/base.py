@@ -155,7 +155,7 @@ def envelopify_response(response):
     options = response_options.parse_args()
     if options.get('envelope') or options.get('callback'):
         data, code, headers = unpack(response)
-        data = dict(status=code, response=data)
+        data = dict(status=code, data=data)
         # add envelople headers
         return data, 200, headers
     return response
