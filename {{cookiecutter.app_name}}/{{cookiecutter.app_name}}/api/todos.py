@@ -1,64 +1,92 @@
 # -*- coding: utf-8 -*-
 """
-    api.tasks
-    {{ "~" * "api.tasks"|count }}
+    api.todos
+    {{ "~" * "api.todos"|count }}
 
     :author: {{ cookiecutter.author }}
     :copyright: (c) {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
 from flask.ext.login import login_required
-from flask.ext.restful import Resource, reqparse
-from flask.ext.restful import fields, types
+from flask.ext.restful import abort, reqparse
 
-from .base import BaseAPI
-from ..models.todos import Todo as TodoModel
+from .base import BaseAPI, BaseResource
+from ..models.todos import Todo
 
-req_parser = reqparse.RequestParser()
-req_parser.add_argument('title', type=str)
-req_parser.add_argument('completed', type=bool)
-
-resource_fields = {
-#    'id': fields.Integer,
-#    'title': fields.String,
-#    'completed': fields.Boolean,
-}
+todo_parser = reqparse.RequestParser()
+todo_parser.add_argument('title', type=str)
+todo_parser.add_argument('completed', type=bool)
 
 
-class Todo(Resource):
+class TodosAPI(BaseAPI):
+    """A complete Flask-Classy-based Todo API resource."""
 
-    def get(self, todo_id):
-        return TodoModel.get(todo_id).to_dict()
+    def index(self):
+        """Returns a Collection of Todos."""
+        return [todo.to_dict() for todo in Todo.all()]
 
-    def put(self, todo_id):
-        data = req_parser.parse_args()
-        todo = TodoModel.get(todo_id)
+    def post(self):
+        """Creates a new Todo."""
+        data = todo_parser.parse_args()
+        todo = Todo.create(**data)
+        return todo.to_dict(), 201
+
+    def get(self, id):
+        """Returns a specific of Todo."""
+        return Todo.get(id).to_dict()
+
+    def put(self, id):
+        """Updates an existing Todo."""
+        data = todo_parser.parse_args()
+        todo = Todo.get(id)
         todo.update(**data)
         return todo.to_dict(), 200
         #return '', 204
 
-    def delete(self, todo_id):
-        todo = TodoModel.get(todo_id)
+    def delete(self, id):
+        """Deletes an existing Todo."""
+        todo = Todo.get(id)
         if todo is None:
             return '', 204
         if todo.delete():
             return '', 204
-        return {'message': 'Unable to delete'}, 409
+        abort(409)
 
 
-class Todos(Resource):
+class TodosResource(BaseResource):
+    """Flask-RESTful-based Todo API Resource for GET, POST."""
 
     def get(self):
-        #return '', 304, [('ETag', 'bambam')] 
-        return [todo.to_dict() for todo in TodoModel.all()]
+        """Returns a Collection of Todos."""
+        return [todo.to_dict() for todo in Todo.all()]
 
     def post(self):
-        data = req_parser.parse_args()
-        todo = TodoModel.create(**data)
+        """Creates a new Todo."""
+        data = todo_parser.parse_args()
+        todo = Todo.create(**data)
         return todo.to_dict(), 201
 
 
-class TasksAPI(BaseAPI):
+class TodoResource(BaseResource):
+    """Flask-RESTful-based Todo API Resource for GET, PUT and DELETE."""
 
-    def index(self):
-        return [todo.to_dict() for todo in TodoModel.all()]
+    def get(self, id):
+        """Returns a specific of Todo."""
+        return Todo.get(id).to_dict()
+
+    def put(self, id):
+        """Updates an existing Todo."""
+        data = todo_parser.parse_args()
+        todo = Todo.get(id)
+        todo.update(**data)
+        return todo.to_dict(), 200
+        #return '', 204
+
+    def delete(self, id):
+        """Deletes an existing Todo."""
+        todo = Todo.get(id)
+        if todo is None:
+            return '', 204
+        if todo.delete():
+            return '', 204
+        abort(409)

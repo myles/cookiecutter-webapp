@@ -12,6 +12,7 @@ from factory import Factory, Sequence, LazyAttribute, PostGenerationMethodCall
 from flask.ext.security.utils import encrypt_password
 
 from {{cookiecutter.app_name}}.models.users import User, Role
+from {{cookiecutter.app_name}}.models.todos import Todo
 from {{cookiecutter.app_name}}.framework.sql import db
 
 class BaseFactory(Factory):
@@ -28,6 +29,10 @@ class RoleFactory(BaseFactory):
     FACTORY_FOR = Role
     name = 'admin'
     description = 'Administrator'
+
+class TodoFactory(BaseFactory):
+    FACTORY_FOR = Todo
+    title = Sequence(lambda n: "todo #{0}".format(n))
 
 class UserFactory(BaseFactory):
     FACTORY_FOR = User

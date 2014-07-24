@@ -9,26 +9,36 @@
 """
 from flask import request
 from flask.ext.classy import FlaskView
-from flask.ext.restful import Api as RestfulAPI
-from flask.ext.restful import reqparse, types
+from flask.ext.restful import Api as RestfulAPI, Resource
+from flask.ext.restful import abort, representations, types
 from flask.ext.restful.representations.json import output_json
+from flask.ext.restful.reqparse import RequestParser
 from flask.ext.restful.utils import unpack
 
-#get_parser = reqparse.RequestParser()
-#get_parser.add_argument('fields', type=str, location='args', store='append')
-#get_parser.add_argument('page', type=int, location='args')
-#get_parser.add_argument('per_page', type=int, location='args')
-#get_parser.add_argument('ETag', type=str, location='headers')
+# Monkey-patch flask.ext.restful.representations.json.settings to always
+# return indented and sorted JSONs.
+representations.json.settings = {
+    'indent': 4,
+    'sort_keys': True,
+}
 
-response_options = reqparse.RequestParser()
+request_options = RequestParser()
+request_options.add_argument('Content-Type', type=str, location='headers')
+request_options.add_argument('fields', type=str, location='args')
+request_options.add_argument('page', type=int, location='args')
+request_options.add_argument('per_page', type=int, location='args')
+
+response_options = RequestParser()
+response_options.add_argument('envelope', type=types.boolean, location='args')
+response_options.add_argument('callback', type=str, location='args')
 response_options.add_argument('X-Conditional', type=types.boolean,
                              location='headers')
 
 
 class ClassyAPI(RestfulAPI):
     """
-    Extend Flask-RESTful to play nicely with conditional requests and
-    Flask-Classy FlaskViews.
+    Extend Flask-RESTful to play nicely with Flask-Classy view,
+    conditional requests, and many other cool API features.
     """
 
     def owns_endpoint(self, endpoint):
@@ -62,20 +72,35 @@ class ClassyAPI(RestfulAPI):
 
     def make_response(self, data, *args, **kwargs):
         """
+        Extending Flask-RESTful's make_response to add functionality.
+
+        :param data: the raw data emitted from the Resource's view function.
+
+        Envelopify:
+        If envelope=true or callback is found in the request's arguments, then
+        we return an enveloped response.  Envelopify must act on raw/untransformed
+        data.
+
+        Conditionalify:
         If the X-Conditional header evaluates to True, then return a
         conditional GET response, which will return a 304 - Not Modified if the
         ETag in the response matches any of the values in the If-None-Match
         request header, otherwise return the default response.
         """
-        resp = super(ClassyAPI, self).make_response(data, *args, **kwargs)
+        response = envelopify_response(responsify(data, *args, **kwargs))
+        data, code, headers = unpack(response)
+        resp = super(ClassyAPI, self).make_response(data, code, headers=headers)
         return conditionalify_response(resp)
 
 
 class BaseAPI(FlaskView):
-    """
-    This is the base class from which ClassyAPI FlaskViews should be modeled.
-    """
+    """Flask-Classy base class for ClassyAPI views."""
+
     trailing_slash = None
+
+    def before_request(self, name, *args, **kwargs):
+        """Enforce Content-Type == application/json"""
+        enforce_json_post_put_patch_requests()
 
     def after_request(self, name, response):
         """Conditionalify responses"""
@@ -84,7 +109,7 @@ class BaseAPI(FlaskView):
     @classmethod
     def make_response(cls, response):
         """JSONify responses"""
-        return jsonify_response(response)
+        return jsonify_response(envelopify_response(response))
 
     @classmethod
     def get_class_suffix(cls):
@@ -92,10 +117,50 @@ class BaseAPI(FlaskView):
         return "API"
 
 
+class BaseResource(Resource):
+    """Flask-RESTful base class Resource API views."""
+
+    def dispatch_request(self, *args, **kwargs):
+        """Extend dispatch_request to enforce Content-Type == application/json"""
+        enforce_json_post_put_patch_requests()
+        return super(BaseResource, self).dispatch_request(*args, **kwargs)
+
+
+def enforce_json_post_put_patch_requests():
+    """
+    Incoming POST, PUT and PATCH requests should have Content-Type set to
+    'application/json' or else a 415 - Unsupported Media Type is returned.
+    """
+    options = request_options.parse_args()
+    content_json = options.get('Content-Type') == 'application/json'
+    post_put_patch = request.method.lower() in ['post', 'put', 'patch']
+    if post_put_patch and not content_json:
+        abort(415)
+
+
+def responsify(data, code, headers=None):
+    if headers:
+        return (data, code, headers)
+    return (data, code)
+
+
+def envelopify_response(response):
+    """
+    Wrap the response in an envelope for JSONP calls or if envelope=true is
+    specifically passed as an argument. Envelope-wrapped responses all return a
+    200 HTTP status code with the actual response code embedded in the envelope.
+    """
+    options = response_options.parse_args()
+    if options.get('envelope') or options.get('callback'):
+        data, code, headers = unpack(response)
+        data = dict(status=code, response=data)
+        # add envelople headers
+        return data, 200, headers
+    return response
+
+
 def jsonify_response(response):
-    """
-    JSONifies the response with Flask-RESTful's output_json representation.
-    """
+    """JSONifies the response with Flask-RESTful's output_json."""
     data, code, headers = unpack(response)
     response = output_json(data, code, headers)
     response.headers['Content-Type'] = 'application/json'
