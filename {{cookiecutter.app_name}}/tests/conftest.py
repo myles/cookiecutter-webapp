@@ -10,17 +10,16 @@
 import pytest
 from webtest import TestApp
 
-from {{cookiecutter.app_name}}.api import init_api
 from {{cookiecutter.app_name}}.frontend import create_app
 from {{cookiecutter.app_name}}.framework.sql import db as _db
 
 from . import settings as test_settings
+from .apis import classy_api, restful_api
 from .factories import UserFactory
 
 @pytest.yield_fixture(scope='function')
 def app():
     _app = create_app(test_settings)
-    init_api(_app)
     ctx = _app.test_request_context()
     ctx.push()
     yield _app
@@ -29,6 +28,11 @@ def app():
 @pytest.fixture(scope='function')
 def testapp(app):
     """A Webtest app."""
+    return TestApp(app)
+
+@pytest.fixture(scope='function', params=[classy_api, restful_api])
+def app_api(app, request):
+    request.param(app)
     return TestApp(app)
 
 @pytest.yield_fixture(scope='function')

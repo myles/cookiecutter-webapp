@@ -94,7 +94,9 @@ class CRUDMixin(core.CRUDMixin):
     def delete(self, commit=True):
         """Remove the record from the database."""
         db.session.delete(self)
-        return commit and db.session.commit()
+        if commit:
+            db.session.commit()
+        return commit
 
 
 class ServiceMixin(core.ServiceMixin):

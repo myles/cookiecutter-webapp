@@ -9,7 +9,7 @@
 """
 from flask import Blueprint
 
-from .base import ClassyAPI
+from .base import ClassyAPI, BaseAPI, BaseResource
 from .todos import TodosAPI, TodoResource, TodosResource
 
 

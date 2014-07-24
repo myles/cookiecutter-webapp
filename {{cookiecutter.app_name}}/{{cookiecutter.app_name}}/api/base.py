@@ -87,10 +87,12 @@ class ClassyAPI(RestfulAPI):
         ETag in the response matches any of the values in the If-None-Match
         request header, otherwise return the default response.
         """
-        response = envelopify_response(responsify(data, *args, **kwargs))
-        data, code, headers = unpack(response)
-        resp = super(ClassyAPI, self).make_response(data, code, headers=headers)
-        return conditionalify_response(resp)
+        response = responsify(data, *args, **kwargs)
+        response = envelopify_response(response)
+        response = jsonify_response(response)
+        #data, code, headers = unpack(response)
+        #resp = super(ClassyAPI, self).make_response(data, code, headers=headers)
+        return conditionalify_response(response)
 
 
 class BaseAPI(FlaskView):
@@ -139,9 +141,9 @@ def enforce_json_post_put_patch_requests():
 
 
 def responsify(data, code, headers=None):
-    if headers:
-        return (data, code, headers)
-    return (data, code)
+    if code == 204:
+        data = ''
+    return (data, code, headers or {})
 
 
 def envelopify_response(response):
@@ -164,6 +166,8 @@ def jsonify_response(response):
     data, code, headers = unpack(response)
     response = output_json(data, code, headers)
     response.headers['Content-Type'] = 'application/json'
+    if code == 204:
+        del response.headers['Content-Type']
     return response
 
 
