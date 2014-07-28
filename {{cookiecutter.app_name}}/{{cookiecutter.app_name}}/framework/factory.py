@@ -18,6 +18,7 @@ from raven.contrib.flask import Sentry
 from . import helpers
 from .extensions import (
     db,
+    jwt,
     mail,
     migrate,
     security,
@@ -60,6 +61,7 @@ def create_app(package_name, package_path,
 
     # Base Extensions
     db.init_app(app)
+    jwt.init_app(app)
     mail.init_app(app)
     migrate.init_app(app, db)
     security.init_app(app, SQLAlchemyUserDatastore(db, User, Role),

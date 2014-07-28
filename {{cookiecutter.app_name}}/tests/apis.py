@@ -15,6 +15,7 @@ def classy_api(app):
     """Create an Flask-Classy-based API on app"""
     api_bp = Blueprint("api_tests", __name__)
     api_ext = ClassyAPI(app)
+    api_ext.add_classy_blueprint(api_bp)
     TodosAPI.register(api_bp)
     app.register_blueprint(api_bp, url_prefix='/api/tests')
 

@@ -40,6 +40,16 @@ class ClassyAPI(RestfulAPI):
     Extend Flask-RESTful to play nicely with Flask-Classy view,
     conditional requests, and many other cool API features.
     """
+    def __init__(self, *args, **kwargs):
+        super(ClassyAPI, self).__init__(*args, **kwargs)
+        self.classy_blueprints = {}
+
+    def add_classy_blueprint(self, blueprint):
+        if blueprint.name in self.classy_blueprints:
+            raise ValueError("A blueprint with the name {0} " \
+                             "is already registered to the API." \
+                             .format(blueprint.name))
+        self.classy_blueprints[blueprint.name] = blueprint
 
     def owns_endpoint(self, endpoint):
         """
@@ -48,8 +58,9 @@ class ClassyAPI(RestfulAPI):
         """
         if super(ClassyAPI, self).owns_endpoint(endpoint):
             return True
-        if endpoint.startswith('api') and 'API:' in endpoint:
-            return True
+        for bp_name in self.classy_blueprints.keys():
+            if endpoint.startswith(bp_name) and 'API:' in endpoint:
+                return True
 
     def _looks_like_an_api_route(self):
         """

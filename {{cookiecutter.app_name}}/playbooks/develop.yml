@@ -2,21 +2,24 @@
 - hosts: devservers
   sudo: True
 
-  vars:
-    - app_debug: "True"
-    - app_instance_path: "/vagrant/instance"
-
   vars_files:
     - vars/common.yml
     - vars/salts.yml
     - vars/secure.yml
 
+{%- raw %}
+
+  vars:
+    - app_debug: "True"
+    - app_instance_path: "/vagrant/instance"
+    - redis_server: "{{ app_name }}"
+    - postgres_server: "{{ app_name }}"
+
   roles:
     - python
     - postgres
     - redis
-
-{%- raw %}
+    - redis-cache
 
   tasks:
     - name: create postgres user 

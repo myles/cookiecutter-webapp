@@ -24,6 +24,9 @@ def init_api(app):
     # handling and reqparse features.
     api = ClassyAPI(app)
 
+    # Add any blueprints
+    api.add_classy_blueprint(api_v1)
+
     # Add Flask-Classy Resources
     TodosAPI.register(api_v1)
 
@@ -36,3 +39,4 @@ def init_api(app):
     # Register API blueprints with the Flask application
     app.register_blueprint(api_v1, url_prefix='/api')
     return api
+
