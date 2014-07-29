@@ -10,12 +10,12 @@
 from flask.ext.login import login_required
 from flask.ext.restful import abort, reqparse
 
-from .base import BaseAPI, BaseResource
-from ..models.todos import Todo
+from ..base import BaseAPI, BaseResource
+from ...models.todos import Todo
 
 todo_parser = reqparse.RequestParser()
 todo_parser.add_argument('title', type=str)
-todo_parser.add_argument('completed', type=bool)
+todo_parser.add_argument('completed', type=bool, default=False)
 
 
 class TodosAPI(BaseAPI):
@@ -33,15 +33,14 @@ class TodosAPI(BaseAPI):
 
     def get(self, id):
         """Returns a specific of Todo."""
-        return Todo.get(id).to_dict()
+        return Todo.get_or_404(id).to_dict()
 
     def put(self, id):
         """Updates an existing Todo."""
         data = todo_parser.parse_args()
         todo = Todo.get(id)
-        todo.update(**data)
+        todo.patch(**data)
         return todo.to_dict(), 200
-        #return '', 204
 
     def delete(self, id):
         """Deletes an existing Todo."""

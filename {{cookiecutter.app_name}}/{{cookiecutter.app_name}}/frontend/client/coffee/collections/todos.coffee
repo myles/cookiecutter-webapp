@@ -4,7 +4,7 @@ define ['collections/base', 'models/todo', 'module'], (BaseCollection, Todo, mod
     
     model: Todo
 
-    url: '/api/todos'
+    url: '/api/v1/todos'
 
     completed: ->
       @where completed: true

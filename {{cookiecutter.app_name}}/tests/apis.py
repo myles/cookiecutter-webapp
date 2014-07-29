@@ -8,20 +8,16 @@
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
 from flask import Blueprint
-from {{ cookiecutter.app_name }}.api import ClassyAPI
-from {{ cookiecutter.app_name }}.api import TodosAPI, TodosResource, TodoResource
+from {{ cookiecutter.app_name }} import api
 
 def classy_api(app):
     """Create an Flask-Classy-based API on app"""
-    api_bp = Blueprint("api_tests", __name__)
-    api_ext = ClassyAPI(app)
-    api_ext.add_classy_blueprint(api_bp)
-    TodosAPI.register(api_bp)
-    app.register_blueprint(api_bp, url_prefix='/api/tests')
+    bp = api.v1.create_blueprint('test', url_prefix='/api/tests')
+    api.register_blueprint(app, bp)
 
 
 def restful_api(app):
     """Create an Flask-RESTful-based API on app"""
-    api_ext = ClassyAPI(app)
-    api_ext.add_resource(TodosResource, '/api/tests/todos', endpoint='todos_api')
-    api_ext.add_resource(TodoResource, '/api/tests/todos/<int:id>', endpoint='todo_api')
+    api_ext = app.extensions['classy_api']
+    api_ext.add_resource(api.v1.TodosResource, '/api/tests/todos', endpoint='todos_api')
+    api_ext.add_resource(api.v1.TodoResource, '/api/tests/todos/<int:id>', endpoint='todo_api')

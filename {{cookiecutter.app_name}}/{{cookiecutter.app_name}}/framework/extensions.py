@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-                                                                                       
 """
-    framework.extensions
-    ~~~~~~~~~~~~~~~~~~~~
+    application.extensions
+    ~~~~~~~~~~~~~~~~~~~~~~
 
     Each extension is initialized in the app factory.
 
@@ -18,8 +18,8 @@ migrate = Migrate()
 from flask.ext.jwt import JWT
 jwt = JWT()
 
-from flask.ext.mail import Mail
-mail = Mail()
+#from flask.ext.mail import Mail
+#mail = Mail()
 
-from flask.ext.security import Security
-security = Security()
+#from flask.ext.security import Security
+#security = Security()

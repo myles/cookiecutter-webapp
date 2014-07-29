@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-    {{ cookiecutter.app_name }}.framework
-    {{ "~" * (cookiecutter.app_name ~ ".framework")|count }}
+    {{ cookiecutter.app_name }}.frontend.forms
+    {{ "~" * (cookiecutter.app_name ~ ".frontend.forms")|count }}
 
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
-from .factory import create_app

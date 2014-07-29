@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-    api.base
-    {{ "~" * "api.base"|count }}
+    {{ cookiecutter.app_name }}.base
+    {{ "~" * (cookiecutter.app_name ~ ".base")|count }}
 
     :author: {{ cookiecutter.author }}
-    :copyright: (c) {{ cookiecutter.copyright }}
+    :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
 from flask import request
@@ -44,7 +44,8 @@ class ClassyAPI(RestfulAPI):
         super(ClassyAPI, self).__init__(*args, **kwargs)
         self.classy_blueprints = {}
 
-    def add_classy_blueprint(self, blueprint):
+    def register_blueprint(self, blueprint):
+        """Register a ClassyAPI blueprint with the extensions."""
         if blueprint.name in self.classy_blueprints:
             raise ValueError("A blueprint with the name {0} " \
                              "is already registered to the API." \
@@ -56,30 +57,13 @@ class ClassyAPI(RestfulAPI):
         Extend owns_endpoint to check for a Flask-Classy endpoint that
         inherits from BaseAPI.
         """
+        # Check Flask-Restful ownership
         if super(ClassyAPI, self).owns_endpoint(endpoint):
             return True
+        # Check ClassyAPI ownership 
         for bp_name in self.classy_blueprints.keys():
             if endpoint.startswith(bp_name) and 'API:' in endpoint:
                 return True
-
-    def _looks_like_an_api_route(self):
-        """
-        You know what your API routes should look like.  Customize this
-        function with those details.
-        """
-        path_info = request.environ.get('PATH_INFO', '')
-        if path_info.startswith('/api'):
-            return True
-
-    def _has_fr_route(self):
-        """
-        Extends _has_fr_route with a check on if the route looks like
-        an API route.
-        """
-        if super(ClassyAPI, self)._has_fr_route():
-            return True
-        if self._looks_like_an_api_route():
-            return True
 
     def make_response(self, data, *args, **kwargs):
         """
@@ -101,8 +85,6 @@ class ClassyAPI(RestfulAPI):
         response = responsify(data, *args, **kwargs)
         response = envelopify_response(response)
         response = jsonify_response(response)
-        #data, code, headers = unpack(response)
-        #resp = super(ClassyAPI, self).make_response(data, code, headers=headers)
         return conditionalify_response(response)
 
 
@@ -146,12 +128,13 @@ def enforce_json_post_put_patch_requests():
     """
     options = request_options.parse_args()
     content_json = options.get('Content-Type') == 'application/json'
-    post_put_patch = request.method.lower() in ['post', 'put', 'patch']
-    if post_put_patch and not content_json:
+    post_put_or_patch = request.method.lower() in ['post', 'put', 'patch']
+    if post_put_or_patch and not content_json:
         abort(415)
 
 
 def responsify(data, code, headers=None):
+    """Returns a response tuple."""
     if code == 204:
         data = ''
     return (data, code, headers or {})
@@ -162,18 +145,25 @@ def envelopify_response(response):
     Wrap the response in an envelope for JSONP calls or if envelope=true is
     specifically passed as an argument. Envelope-wrapped responses all return a
     200 HTTP status code with the actual response code embedded in the envelope.
+
+    Returns a response tuple.
     """
     options = response_options.parse_args()
     if options.get('envelope') or options.get('callback'):
         data, code, headers = unpack(response)
         data = dict(status=code, data=data)
-        # add envelople headers
+        if headers:
+            data['headers'] = headers
         return data, 200, headers
     return response
 
 
 def jsonify_response(response):
-    """JSONifies the response with Flask-RESTful's output_json."""
+    """
+    JSONifies the response with Flask-RESTful's output_json.
+
+    Returns a Flask Response
+    """
     data, code, headers = unpack(response)
     response = output_json(data, code, headers)
     response.headers['Content-Type'] = 'application/json'
@@ -188,6 +178,8 @@ def conditionalify_response(response):
     conditional GET response, which will return a 304 - Not Modified if the
     ETag in the response matches any of the values in the If-None-Match
     request header, otherwise return the default response.
+
+    Returns a Flask Response
     """
     args = response_options.parse_args()
     if request.method == 'GET':

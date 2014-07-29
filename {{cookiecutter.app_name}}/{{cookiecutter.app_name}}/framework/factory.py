@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    framwork.factory
-    ~~~~~~~~~~~~~~~~
+    {{ cookiecutter.app_name }}.framework.factory
+    {{ "~" * (cookiecutter.app_name ~ ".framework.factory")|count }}
 
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}
@@ -11,26 +11,18 @@ import os
 
 from celery import Celery
 from flask import Flask
-from flask.ext.security import SQLAlchemyUserDatastore
-#from flask.ext.social import SQLAlchemyConnectionDatastore
 from raven.contrib.flask import Sentry
 
-from . import helpers
 from .extensions import (
     db,
     jwt,
-    mail,
     migrate,
-    security,
 )
 from .middleware import HTTPMethodOverrideMiddleware
-from ..forms.security import ExtendedRegisterForm
-from ..models.users import User, Role, Connection
+
 
 def create_app(package_name, package_path,
-               settings_override=None,
-               register_blueprints=True,
-               register_security_blueprint=True):
+               settings_override=None):
     """
     Returns a :class:`Flask` application instance configured with common
     functionality for the webapp.
@@ -38,12 +30,6 @@ def create_app(package_name, package_path,
     :param package_name: application package name
     :param package_path: application package path
     :param settings_override: a dictionary of settings to override
-    :param register_blueprints: flag to specify if the factory should auto-discover
-                                blueprints to be register to the application.
-                                Defaults to `True`.
-    :param register_security_blueprint: flag to specify if the Flask-Security
-                                        Blueprint should be registered. Defaults
-                                        to `True`.
     """
     # Instance Path
     instance_path = os.environ.get("{{ cookiecutter.app_name | upper }}_INSTANCE_PATH", None)
@@ -62,19 +48,11 @@ def create_app(package_name, package_path,
     # Base Extensions
     db.init_app(app)
     jwt.init_app(app)
-    mail.init_app(app)
     migrate.init_app(app, db)
-    security.init_app(app, SQLAlchemyUserDatastore(db, User, Role),
-                      register_blueprint=register_security_blueprint,
-                      register_form=ExtendedRegisterForm)
 
     # Sentry - only for production 
     if not app.debug and not app.testing and 'SENTRY_DSN' in app.config:
         sentry = Sentry(app)
-
-    # Blueprints
-    if register_blueprints:
-        helpers.register_blueprints(app, package_name, package_path)
 
     # Middleware
     app.wsgi_app = HTTPMethodOverrideMiddleware(app.wsgi_app)
@@ -83,8 +61,11 @@ def create_app(package_name, package_path,
 
 
 def create_celery_app(app=None):
-    app = app or create_app('{{ cookiecutter.app_name }}', os.path.dirname(__file__))
-    broker = app.config.get('CELERY_BROKER_URL', None) # 'redis://127.0.0.1:6379'
+    app = app or create_app('{{ cookiecutter.app_name }}',
+                            os.path.dirname(__file__))
+    # celery must be configured with the proper broker
+    # when it is initialized; this 
+    broker = app.config.get('CELERY_BROKER_URL', None)
     celery = Celery(__name__, broker=broker)
     celery.config_from_object(app.config, force=True)
     TaskBase = celery.Task

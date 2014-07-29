@@ -4,18 +4,18 @@
     ~~~~~~~~~~~~~
 
     SQL database module, including the SQLAlchemy database object and DB-related
-    object and functions.
+    object and functions.  The :class:`Model` provided is a good starting point.
 
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
-from . import core
+from . import base
 from .extensions import db
 from flask.ext.restless.helpers import to_dict as restless_to_dict
 
 
-class JSONMixin(core.JSONMixin):
+class JSONMixin(base.JSONMixin):
 
     def to_dict(self, deep=None, exclude=None, include=None,
                 include_methods=None, **kwargs):
@@ -68,7 +68,7 @@ class JSONMixin(core.JSONMixin):
                                 include_methods=include_methods, **kwargs)
 
 
-class CRUDMixin(core.CRUDMixin):
+class CRUDMixin(base.CRUDMixin):
     """Mixin that adds convenience methods for CRUD (create, read, update, delete)
     operations.
     """
@@ -99,7 +99,7 @@ class CRUDMixin(core.CRUDMixin):
         return commit
 
 
-class ServiceMixin(core.ServiceMixin):
+class ServiceMixin(base.ServiceMixin):
 
     @classmethod
     def all(cls):
@@ -126,7 +126,7 @@ class ServiceMixin(core.ServiceMixin):
         return cls.query.filter(cls.id.in_(ids)).all()
 
     @classmethod
-    def get_or_404(self, id):
+    def get_or_404(cls, id):
         """Returns an instance of the service's model with the specified id or
         raises an 404 error if an instance with the specified id does not exist.
 
@@ -184,7 +184,7 @@ def ReferenceColumn(tablename, nullable=False, pk_name='id', **kwargs):
 
     Usage: ::
 
-        category_id = ReferenceCol('category')
+        category_id = ReferenceColumn('category')
         category = relationship('Category', backref='categories')
     """
     return db.Column(db.ForeignKey("{0}.{1}".format(tablename, pk_name)),
