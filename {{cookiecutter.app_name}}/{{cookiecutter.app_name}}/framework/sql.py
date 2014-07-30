@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-                                                                                       
+# -*- coding: utf-8 -*-
 """
-    framework.sql
-    ~~~~~~~~~~~~~
-
-    SQL database module, including the SQLAlchemy database object and DB-related
-    object and functions.  The :class:`Model` provided is a good starting point.
+    {{ cookiecutter.app_name }}.framework.sql
+    {{ "~" * (cookiecutter.app_name ~ ".framework.sql")|count }}
 
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}

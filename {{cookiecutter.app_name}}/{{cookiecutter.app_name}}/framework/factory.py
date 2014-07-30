@@ -11,14 +11,18 @@ import os
 
 from celery import Celery
 from flask import Flask
+from flask.ext.security import SQLAlchemyUserDatastore
+from passlib.context import CryptContext
 from raven.contrib.flask import Sentry
 
+from . import security
 from .extensions import (
     db,
     jwt,
     migrate,
 )
 from .middleware import HTTPMethodOverrideMiddleware
+from ..models.users import User, Role
 
 
 def create_app(package_name, package_path,
@@ -45,10 +49,22 @@ def create_app(package_name, package_path,
     app.config.from_pyfile("settings.cfg", silent=True)
     app.config.from_object(settings_override)
 
-    # Base Extensions
+    # Password Context
+    app.extensions['pwd_context'] = CryptContext(schemes=["bcrypt"])
+
+    # User Datastore
+    app.extensions['user_datastore'] = SQLAlchemyUserDatastore(db, User, Role)
+
+    # Flask-SQLAlchemy
     db.init_app(app)
-    jwt.init_app(app)
+
+    # Flask-Migrate
     migrate.init_app(app, db)
+
+    # Flask-JWT
+    jwt.init_app(app)
+    jwt.authentication_handler(security.authenticate)
+    jwt.user_handler(security.load_user)
 
     # Sentry - only for production 
     if not app.debug and not app.testing and 'SENTRY_DSN' in app.config:

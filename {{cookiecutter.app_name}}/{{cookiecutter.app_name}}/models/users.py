@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    models.users
-    ~~~~~~~~~~~~
+    {{ cookiecutter.app_name }}.models.users
+    {{ "~" * (cookiecutter.app_name ~ ".models.users")|count }}
 
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}

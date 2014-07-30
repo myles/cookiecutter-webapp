@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-    frontend.assets
-    {{ "~" * "frontend.assets"|count }}
+    {{ cookiecutter.app_name }}.frontend.assets
+    {{ "~" * (cookiecutter.app_name ~ ".frontend.assets")|count }}
 
     :author: {{ cookiecutter.author }}
-    :copyright: (c) {{ cookiecutter.copyright }}
+    :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
 import os

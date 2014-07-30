@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    framework.middleware
-    ~~~~~~~~~~~~~~~~~~~~
+    {{ cookiecutter.app_name }}.framework.middleware
+    {{ "~" * (cookiecutter.app_name ~ ".framework.middleware")|count }}
 
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}

@@ -8,12 +8,12 @@
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
 from datetime import datetime
-from factory import Factory, Sequence, LazyAttribute, PostGenerationMethodCall
-from flask.ext.security.utils import encrypt_password
+from factory import Factory, Sequence, LazyAttribute, post_generation
 
 from {{cookiecutter.app_name}}.models.users import User, Role
 from {{cookiecutter.app_name}}.models.todos import Todo
 from {{cookiecutter.app_name}}.framework.sql import db
+from {{cookiecutter.app_name}}.framework.security import encrypt_password
 
 class BaseFactory(Factory):
     ABSTRACT_FACTORY = True
@@ -37,7 +37,6 @@ class TodoFactory(BaseFactory):
 class UserFactory(BaseFactory):
     FACTORY_FOR = User
     email = Sequence(lambda n: 'user{0}@foobar.com'.format(n))
-    password = LazyAttribute(lambda a: encrypt_password('password'))
     confirmed_at = datetime.utcnow()
     last_login_at = datetime.utcnow()
     current_login_at = datetime.utcnow()
@@ -45,3 +44,7 @@ class UserFactory(BaseFactory):
     current_login_ip = '127.0.0.1'
     login_count = 1
     active = True
+
+    @post_generation
+    def password(self, create, extracted, **kwargs):
+        self.password = encrypt_password(extracted or "password")

@@ -22,6 +22,12 @@ def user(db):
 
 class TestLoggingIn:
 
+    def test_jwt_log_in_returns_200_with_token(self, user, testapp):
+        data = dict(username=user.email, password='myprecious')
+        res = testapp.post_json('/auth', data)
+        assert res.status_code == 200
+        assert 'token' in res.json
+
     def test_log_in_returns_200_with_email_on_page(self, user, testapp):
         # Goes to homepage
         res = testapp.get("/")

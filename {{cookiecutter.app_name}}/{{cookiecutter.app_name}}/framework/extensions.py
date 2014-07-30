@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-                                                                                       
+# -*- coding: utf-8 -*-
 """
-    application.extensions
-    ~~~~~~~~~~~~~~~~~~~~~~
-
-    Each extension is initialized in the app factory.
+    {{ cookiecutter.app_name }}.framework.extensions
+    {{ "~" * (cookiecutter.app_name ~ ".framework.extensions")|count }}
 
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}
@@ -17,9 +15,3 @@ migrate = Migrate()
 
 from flask.ext.jwt import JWT
 jwt = JWT()
-
-#from flask.ext.mail import Mail
-#mail = Mail()
-
-#from flask.ext.security import Security
-#security = Security()

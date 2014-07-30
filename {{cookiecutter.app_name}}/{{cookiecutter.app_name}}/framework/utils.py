@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-                                                                                       
+# -*- coding: utf-8 -*-
 """
-    framework.utils
-    ~~~~~~~~~~~~~~~
+    {{ cookiecutter.app_name }}.framework.utils
+    {{ "~" * (cookiecutter.app_name ~ ".framework.utils")|count }}
 
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}

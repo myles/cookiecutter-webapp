@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-    settings
-    {{ "~" * "settings"|count }}
+    {{ cookiecutter.app_name }}.settings
+    {{ "~" * (cookiecutter.app_name ~ ".settings")|count }}
 
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
+
 # Flask
 DEBUG = True
 TESTING = False
@@ -44,10 +45,17 @@ SECURITY_POST_RESET_VIEW = None
 # Flask-Security options
 SECURITY_FLASH_MESSAGES = True
 SECURITY_PASSWORD_HASH = 'bcrypt'
-SECURITY_PASSWORD_SALT = 'another secret key - override with instance configuration'
-# You can generate random salts using the scripts/generate_salts script in
-# the playbooks directory.  This will generate a new vars/salts.yml file.
-# You should protect that file using ansible-vault.
+SECURITY_PASSWORD_SALT = None
+SECURITY_PASSWORD_NO_SALT = True
+
+# NOTE: We are supplying our own password context from passlib; no additional
+# password salts are requried. We have to override the default of
+# Flask-Security in order to make this happen.
+#
+# You can generate random salts for the remaining Flask-Security salts by using
+# the scripts/generate_salts script in the playbooks directory.  This will
+# generate a new vars/salts.yml file. You should protect that file using
+# ansible-vault.
 
 # Flask-Security email options
 SECURITY_SEND_PASSWORD_CHANGE_EMAIL = False

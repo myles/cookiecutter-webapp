@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-    framework.core
-    ~~~~~~~~~~~~~~
+    {{ cookiecutter.app_name }}.framework.base
+    {{ "~" * (cookiecutter.app_name ~ ".framework.base")|count }}
 
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
+
 
 class {{ cookiecutter.AppName }}Error(Exception):
     """Base application error class."""

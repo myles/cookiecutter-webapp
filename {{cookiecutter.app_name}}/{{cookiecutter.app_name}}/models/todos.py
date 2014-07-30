@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    models.todos
-    ~~~~~~~~~~~~
+    {{ cookiecutter.app_name }}.models.todos
+    {{ "~" * (cookiecutter.app_name ~ ".models.todos")|count }}
 
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}
@@ -21,5 +21,3 @@ class Todo(Model):
     title = db.Column(db.String(128), nullable=False)
     completed = db.Column(db.Boolean, default=False)
 
-#   user_id = ReferenceColumn("users")
-#   user = db.relationship("User")
