@@ -105,6 +105,37 @@ class TestAPILoggingIn:
         assert resp.status_code == 200
         assert 'token' in resp.json
 
-    def test_secure_endpoint(self, user, testapi):
+    def test_secure_endpoint_fails_without_token(self, user, testapi):
         resp = testapi.get("/api/tests/secure", expect_errors=True)
         assert resp.status_code == 401
+
+    def test_secure_endpoint_succeeds_with_jwt_token(self, user, testapi):
+        data = dict(username=user.email, password='myprecious')
+        resp = testapi.post_json('/auth', data)
+        assert resp.status_code == 200
+        assert 'token' in resp.json
+        resp = testapi.get("/api/tests/secure", headers={
+            "Authorization": "Bearer {token}".format(token=resp.json['token'])
+        })
+        assert resp.status_code == 200
+        assert 'secret' in resp.json
+
+    def test_secure_endpoint_fails_after_user_reset_secret(self, user, testapi):
+        data = dict(username=user.email, password='myprecious')
+        resp = testapi.post_json('/auth', data)
+        assert resp.status_code == 200
+        assert 'token' in resp.json
+        token = resp.json['token']
+        resp = testapi.get("/api/tests/secure", headers={
+            "Authorization": "Bearer {token}".format(token=token),
+        })
+        assert resp.status_code == 200
+        assert 'secret' in resp.json
+        user.reset_secret()
+        resp = testapi.get("/api/tests/secure", headers={
+            "Authorization": "Bearer {token}".format(token=token),
+        }, expect_errors=True)
+        assert resp.status_code == 400
+        assert resp.json['error'] == 'Invalid JWT'
+        assert resp.json['description'] == 'Invalid secret'
+

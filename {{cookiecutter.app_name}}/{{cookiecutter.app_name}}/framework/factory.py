@@ -16,7 +16,7 @@ from raven.contrib.flask import Sentry
 
 from .extensions import *
 from .middleware import HTTPMethodOverrideMiddleware
-from .security import authenticate, load_user
+from .security import authenticate, load_user, make_payload
 from ..models.users import User, Role
 
 _log = logging.getLogger(__name__)
@@ -66,6 +66,7 @@ def create_app(package_name, package_path, settings_override=None,
     # Flask-JWT
     jwt.init_app(app)
     jwt.authentication_handler(authenticate)
+    jwt.payload_handler(make_payload)
     jwt.user_handler(load_user)
 
     # Sentry - only for production 

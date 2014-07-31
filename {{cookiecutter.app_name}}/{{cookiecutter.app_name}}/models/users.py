@@ -7,6 +7,9 @@
     :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
+import base64
+import os
+
 from flask.ext.security import RoleMixin, UserMixin
 
 from ..framework.sql import (
@@ -45,6 +48,11 @@ class Connection(Model):
     rank = db.Column(db.Integer)
 
 
+def generate_secret():
+    """Generate a random string used for salts and secret keys."""
+    return base64.b64encode(os.urandom(48)).decode('utf-8')
+
+
 class User(UserMixin, Model):
 
     __tablename__ = "users"
@@ -53,6 +61,7 @@ class User(UserMixin, Model):
     email = db.Column(db.String(128), unique=True, nullable=False)
     password = db.Column(db.String(120))
     active = db.Column(db.Boolean())
+    secret = db.Column(db.String(64), default=generate_secret)
     confirmed_at = db.Column(db.DateTime())
     last_login_at = db.Column(db.DateTime())
     current_login_at = db.Column(db.DateTime())
@@ -64,3 +73,6 @@ class User(UserMixin, Model):
     connections = db.relationship('Connection',
             backref=db.backref('user', lazy='joined'), cascade='all')
 
+    def reset_secret(self):
+        self.secret = generate_secret()
+        self.save()

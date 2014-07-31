@@ -22,6 +22,13 @@ class TestUser:
         retrieved = User.get(user.id)
         assert retrieved == user
 
+    def test_reset_secret(self, user):
+        old_secret = user.secret
+        user.reset_secret()
+        assert old_secret != user.secret
+        user = User.get(user.id)
+        assert old_secret != user.secret
+
     def test_created_at_defaults_to_datetime(self, user):
         assert user.active
         assert bool(user.confirmed_at)
@@ -30,6 +37,7 @@ class TestUser:
         assert isinstance(user.confirmed_at, dt.datetime)
         assert isinstance(user.last_login_at, dt.datetime)
         assert isinstance(user.current_login_at, dt.datetime)
+        assert isinstance(user.secret, basestring)
 
     def test_password_is_nullable(self):
         user = User(email='foo@bar.com')
