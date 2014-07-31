@@ -9,11 +9,11 @@
 """
 from datetime import datetime
 from factory import Factory, Sequence, LazyAttribute, post_generation
+from flask.ext.security.utils import encrypt_password
 
 from {{cookiecutter.app_name}}.models.users import User, Role
 from {{cookiecutter.app_name}}.models.todos import Todo
 from {{cookiecutter.app_name}}.framework.sql import db
-from {{cookiecutter.app_name}}.framework.security import encrypt_password
 
 class BaseFactory(Factory):
     ABSTRACT_FACTORY = True

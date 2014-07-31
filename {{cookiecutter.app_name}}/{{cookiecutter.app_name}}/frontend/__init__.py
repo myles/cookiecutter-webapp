@@ -7,8 +7,13 @@
     :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
+import logging
+
 from . import extensions
 from . import views
+
+_log = logging.getLogger(__name__)
+
 
 def create_app(settings_override=None):
     """Returns a {{ cookiecutter.app_name }} frontend application instance"""
@@ -16,35 +21,16 @@ def create_app(settings_override=None):
     from . import assets
     from .. import framework
 
-    app = framework.create_app(__name__, __path__, settings_override)
-
+    app = framework.create_app(__name__, __path__, settings_override,
+                               security_register_blueprint=True)
     # Init assets
     assets.init_app(app)
 
     # Flask-DebugToolbar
     extensions.debug_toolbar.init_app(app)
 
-    # Flask-Mail
-    extensions.mail.init_app(app)
-
-    # Flask-Security
-    extensions.security.init_app(app, app.extensions['user_datastore'],
-                                 pwd_context=app.extensions['pwd_context'])
-
-    # Flask-Babel
-    # extensions.babel.init_app(app)
-
-    # Register custom error handlers
-    #if not app.debug:
-    #    for e in [500, 404]:
-    #        app.errorhandler(e)(handle_error)
-
     # Initialize Views
     views.init_app(app)
 
+    _log.info("Flask frontend app created")
     return app
-
-
-def handle_error(e):
-    return render_template('errors/%s.html' % e.code), e.code
-

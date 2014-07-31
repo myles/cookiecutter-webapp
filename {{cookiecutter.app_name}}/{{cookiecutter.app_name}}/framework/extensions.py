@@ -15,3 +15,11 @@ migrate = Migrate()
 
 from flask.ext.jwt import JWT
 jwt = JWT()
+
+from flask.ext.mail import Mail
+mail = Mail()
+
+from flask.ext.security import Security
+security = Security()
+
+__all__ = ("db", "migrate", "jwt", "mail", "security", )
