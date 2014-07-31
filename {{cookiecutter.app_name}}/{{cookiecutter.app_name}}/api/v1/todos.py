@@ -10,7 +10,7 @@
 from flask.ext.login import login_required
 from flask.ext.restful import abort, reqparse
 
-from ..base import BaseAPI, BaseResource
+from ..base import BaseAPI, BaseResource, secure_endpoint
 from ...models.todos import Todo
 
 todo_parser = reqparse.RequestParser()

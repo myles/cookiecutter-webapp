@@ -7,13 +7,17 @@
     :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
+import logging
+
 from flask import request
 from flask.ext.classy import FlaskView
+from flask.ext.jwt import verify_jwt, JWTError
 from flask.ext.restful import Api as RestfulAPI, Resource
 from flask.ext.restful import abort, representations, types
 from flask.ext.restful.representations.json import output_json
 from flask.ext.restful.reqparse import RequestParser
 from flask.ext.restful.utils import unpack
+from functools import wraps
 
 # Monkey-patch flask.ext.restful.representations.json.settings to always
 # return indented and sorted JSONs.
@@ -33,6 +37,10 @@ response_options.add_argument('envelope', type=types.boolean, location='args')
 response_options.add_argument('callback', type=str, location='args')
 response_options.add_argument('X-Conditional', type=types.boolean,
                              location='headers')
+
+_log = logging.getLogger(__name__)
+
+__all__ = ('ClassyAPI', 'BaseAPI', 'BaseResource', 'secure_endpoint')
 
 
 class ClassyAPI(RestfulAPI):
@@ -64,6 +72,11 @@ class ClassyAPI(RestfulAPI):
         for bp_name in self.classy_blueprints.keys():
             if endpoint.startswith(bp_name) and 'API:' in endpoint:
                 return True
+
+    def error_router(self, original_handler, e):
+        if isinstance(e, JWTError):
+            return original_handler(e)
+        return super(ClassyAPI, self).error_router(original_handler, e)
 
     def make_response(self, data, *args, **kwargs):
         """
@@ -119,6 +132,17 @@ class BaseResource(Resource):
         """Extend dispatch_request to enforce Content-Type == application/json"""
         enforce_json_post_put_patch_requests()
         return super(BaseResource, self).dispatch_request(*args, **kwargs)
+
+
+def secure_endpoint(jwt=True, oauth2=True, jwt_realm=None):
+    """View decorator to protect API endpoints."""
+    def wrapper(fn):
+        @wraps(fn)
+        def decorator(*args, **kwargs):
+            verify_jwt(jwt_realm)
+            return fn(*args, **kwargs)
+        return decorator
+    return wrapper
 
 
 def enforce_json_post_put_patch_requests():

@@ -8,12 +8,15 @@
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
 from . import v1
-from .base import ClassyAPI
+from .. import framework
+from .base import ClassyAPI, BaseAPI, BaseResource, secure_endpoint
+
+__all__ = ('create_app', 'register_blueprint', 'ClassyAPI', 'BaseAPI',
+           'BaseResource', 'secure_endpoint', 'v1')
+
 
 def create_app(settings_override=None):
     """Returns an API application instance."""
-
-    from .. import framework
 
     # Create and extend a minimal application
     app = framework.create_app(__name__, __path__, settings_override)
@@ -27,6 +30,7 @@ def create_app(settings_override=None):
         register_blueprint(app, bp)
 
     return app
+
 
 def register_blueprint(app, blueprint):
     """Register an API blueprint."""

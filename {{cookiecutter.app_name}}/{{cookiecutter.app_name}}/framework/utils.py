@@ -7,11 +7,20 @@
     :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
 """
+import base64
+import os
+
 from flask import flash
 
+
 def flash_errors(form, category="warning"):
-    '''Flash all errors for a form.'''
+    """Flash all errors for a form."""
     for field, errors in form.errors.items():
         for error in errors:
             flash("{0} - {1}"
                     .format(getattr(form, field).label.text, error), category)
+
+
+def generate_salt():
+    """Generate a random string used for salts and secret keys."""
+    return base64.b64encode(os.urandom(32)).decode('utf-8')

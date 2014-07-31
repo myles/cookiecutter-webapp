@@ -12,7 +12,7 @@
 import copy
 import pytest
 
-from .factories import TodoFactory
+from .factories import TodoFactory, UserFactory
 
 @pytest.fixture
 def user(db):
@@ -96,3 +96,15 @@ class TestAPI:
         assert resp.json['status'] == resp.status_code
         assert len(resp.json['data']) == 2
 
+
+class TestAPILoggingIn:
+
+    def test_jwt_log_in_returns_200_with_token(self, user, testapi):
+        data = dict(username=user.email, password='myprecious')
+        resp = testapi.post_json('/auth', data)
+        assert resp.status_code == 200
+        assert 'token' in resp.json
+
+    def test_secure_endpoint(self, user, testapi):
+        resp = testapi.get("/api/tests/secure", expect_errors=True)
+        assert resp.status_code == 401
