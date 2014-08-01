@@ -52,8 +52,11 @@ class TestAPI:
         assert isinstance(resp.json, list)
         assert len(resp.json) == 2
 
-    def test_todos_post(self, db, testapi):
-        resp = testapi.post_json("/api/tests/todos", {"title": "todo #1"})
+    def test_todos_post(self, user, testapi):
+        token = self.test_jwt_log_in_returns_200_with_token(user, testapi)
+        resp = testapi.post_json("/api/tests/todos", {"title": "todo #1"}, headers={
+            "Authorization": "Bearer {token}".format(token=token),
+        })
         assert resp.status_code == 201
         assert 'id' in resp.json
 
@@ -62,21 +65,31 @@ class TestAPI:
         assert resp.json['title'] == 'todo #1'
         assert resp.json['completed'] == False
 
-    def test_todos_put(self, db, testapi):
-        resp = testapi.post_json("/api/tests/todos", {"title": "todo #1"})
+    def test_todos_put(self, user, testapi):
+        token = self.test_jwt_log_in_returns_200_with_token(user, testapi)
+        resp = testapi.post_json("/api/tests/todos", {"title": "todo #1"}, headers={
+            "Authorization": "Bearer {token}".format(token=token),
+        })
         assert resp.status_code == 201
         assert 'id' in resp.json
         data = copy.copy(resp.json)
         data['completed'] = True
         uri = "/api/tests/todos/{0}".format(resp.json['id'])
-        resp = testapi.put_json(uri, data)
+        resp = testapi.put_json(uri, data, headers={
+            "Authorization": "Bearer {token}".format(token=token),
+        })
         assert resp.status_code == 200
         assert resp.json['completed'] == True
 
-    def test_todos_delete(self, todos, testapi):
-        resp = testapi.delete("/api/tests/todos/{0}".format(todos[0].id))
+    def test_todos_delete(self, user, todos, testapi):
+        token = self.test_jwt_log_in_returns_200_with_token(user, testapi)
+        resp = testapi.delete("/api/tests/todos/{0}".format(todos[0].id), headers={
+            "Authorization": "Bearer {token}".format(token=token),
+        })
         resp.status_code == 204
-        resp = testapi.delete_json("/api/tests/todos/{0}".format(todos[0].id))
+        resp = testapi.delete_json("/api/tests/todos/{0}".format(todos[0].id), headers={
+            "Authorization": "Bearer {token}".format(token=token),
+        })
         resp.status_code == 204
 
     def test_todos_patch(self, todos, testapi):
@@ -96,6 +109,13 @@ class TestAPI:
         assert resp.json['status'] == resp.status_code
         assert len(resp.json['data']) == 2
 
+    def test_jwt_log_in_returns_200_with_token(self, user, testapi):
+        data = dict(username=user.email, password='myprecious')
+        resp = testapi.post_json('/auth', data)
+        assert resp.status_code == 200
+        assert 'token' in resp.json
+        return resp.json['token']
+
 
 class TestAPILoggingIn:
 
@@ -104,28 +124,22 @@ class TestAPILoggingIn:
         resp = testapi.post_json('/auth', data)
         assert resp.status_code == 200
         assert 'token' in resp.json
+        return resp.json['token']
 
     def test_secure_endpoint_fails_without_token(self, user, testapi):
         resp = testapi.get("/api/tests/secure", expect_errors=True)
         assert resp.status_code == 401
 
     def test_secure_endpoint_succeeds_with_jwt_token(self, user, testapi):
-        data = dict(username=user.email, password='myprecious')
-        resp = testapi.post_json('/auth', data)
-        assert resp.status_code == 200
-        assert 'token' in resp.json
+        token = self.test_jwt_log_in_returns_200_with_token(user, testapi)
         resp = testapi.get("/api/tests/secure", headers={
-            "Authorization": "Bearer {token}".format(token=resp.json['token'])
+            "Authorization": "Bearer {token}".format(token=token),
         })
         assert resp.status_code == 200
         assert 'secret' in resp.json
 
     def test_secure_endpoint_fails_after_user_reset_secret(self, user, testapi):
-        data = dict(username=user.email, password='myprecious')
-        resp = testapi.post_json('/auth', data)
-        assert resp.status_code == 200
-        assert 'token' in resp.json
-        token = resp.json['token']
+        token = self.test_jwt_log_in_returns_200_with_token(user, testapi)
         resp = testapi.get("/api/tests/secure", headers={
             "Authorization": "Bearer {token}".format(token=token),
         })

@@ -25,6 +25,7 @@ class TodosAPI(BaseAPI):
         """Returns a Collection of Todos."""
         return [todo.to_dict() for todo in Todo.all()]
 
+    @secure_endpoint()
     def post(self):
         """Creates a new Todo."""
         data = todo_parser.parse_args()
@@ -35,6 +36,7 @@ class TodosAPI(BaseAPI):
         """Returns a specific of Todo."""
         return Todo.get_or_404(id).to_dict()
 
+    @secure_endpoint()
     def put(self, id):
         """Updates an existing Todo."""
         data = todo_parser.parse_args()
@@ -42,6 +44,7 @@ class TodosAPI(BaseAPI):
         todo.patch(**data)
         return todo.to_dict(), 200
 
+    @secure_endpoint()
     def delete(self, id):
         """Deletes an existing Todo."""
         todo = Todo.get(id)
@@ -59,6 +62,7 @@ class TodosResource(BaseResource):
         """Returns a Collection of Todos."""
         return [todo.to_dict() for todo in Todo.all()]
 
+    @secure_endpoint()
     def post(self):
         """Creates a new Todo."""
         data = todo_parser.parse_args()
@@ -73,6 +77,7 @@ class TodoResource(BaseResource):
         """Returns a specific of Todo."""
         return Todo.get(id).to_dict()
 
+    @secure_endpoint()
     def put(self, id):
         """Updates an existing Todo."""
         data = todo_parser.parse_args()
@@ -81,6 +86,7 @@ class TodoResource(BaseResource):
         return todo.to_dict(), 200
         #return '', 204
 
+    @secure_endpoint()
     def delete(self, id):
         """Deletes an existing Todo."""
         todo = Todo.get(id)
