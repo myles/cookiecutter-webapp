@@ -78,6 +78,22 @@ class TestLoggingIn:
         # sees error
         assert "user does not exist" in res
 
+    def test_auth_jwt_token_succeeds_with_logged_in_user_and_json_post(self, user, testapp):
+        self.test_log_in_returns_200_with_email_on_page(user, testapp)
+        resp = testapp.post_json("/auth/jwt/token", {})
+        assert resp.status_code == 200
+        assert 'token' in resp.json
+
+    def test_auth_jwt_token_fails_with_logged_in_user_and_non_json_post(self, user, testapp):
+        self.test_log_in_returns_200_with_email_on_page(user, testapp)
+        resp = testapp.post("/auth/jwt/token", {}, expect_errors=True)
+        assert resp.status_code == 415
+
+    def test_auth_jwt_token_fails_without_logged_in_user(self, user, testapp):
+        testapp.reset()
+        resp = testapp.post_json("/auth/jwt/token", {}, expect_errors=True)
+        assert resp.status_code == 403
+
 
 class TestRegistering:
 

@@ -9,7 +9,7 @@
 """
 
 DEBUG = False
-TESTING = True
+TESTING = False
 SECRET_KEY = 'testing-secret-key'
 
 CELERY_ALWAYS_EAGER = True

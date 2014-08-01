@@ -211,3 +211,11 @@ def conditionalify_response(response):
     if args.get('X-Conditional'):
         return response.make_conditional(request)
     return response
+
+
+def json_required(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        enforce_json_post_put_patch_requests()
+        return func(*args, **kwargs)
+    return decorated_view
