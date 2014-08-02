@@ -18,3 +18,5 @@ require.config {
     jquery:
       exports: '$'
 }
+
+require ['utils/backbone-sync-jwt']

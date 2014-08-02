@@ -1,4 +1,4 @@
-require ['config'], () ->
+require ['main'], () ->
 
   require ['react', 'collections/todos', 'views/todoList'], (React, Todos, TodoList) ->
 
