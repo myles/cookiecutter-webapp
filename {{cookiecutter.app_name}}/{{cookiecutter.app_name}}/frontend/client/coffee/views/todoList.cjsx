@@ -28,9 +28,12 @@ define ['backbone', 'react', 'mixins/backbone', 'views/todoItem', 'module'], (Ba
         return
       val = @refs.newField.getDOMNode().value.trim()
       if val
-        @props.todos.create
+        @props.todos.create {
           title: val
           completed: false
+        }, {
+          wait: true
+        }
         @refs.newField.getDOMNode().value = ''
       return false
 
@@ -42,8 +45,11 @@ define ['backbone', 'react', 'mixins/backbone', 'views/todoItem', 'module'], (Ba
 
     save: (todo, text) ->
       if todo.get('title') != text
-        todo.save title: text
+        todo.save({title: text}, {wait: true})
       @setState editing: null
+
+    destroy: (todo) ->
+      todo.destroy()
 
     cancel: ->
       @setState editing: null
@@ -64,7 +70,7 @@ define ['backbone', 'react', 'mixins/backbone', 'views/todoItem', 'module'], (Ba
           todo={todo}
           editing={@state.editing == todo.get('id')}
           onToggle={todo.toggle.bind(todo)}
-          onDestroy={todo.destroy.bind(todo)}
+          onDestroy={@destroy.bind(@, todo)}
           onEdit={@edit.bind(@, todo)}
           onSave={@save.bind(@, todo)}
           onCancel={@cancel}

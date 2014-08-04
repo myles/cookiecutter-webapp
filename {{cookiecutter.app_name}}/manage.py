@@ -21,9 +21,9 @@ from {{cookiecutter.app_name}}.framework.sql import db
 from {{cookiecutter.app_name}}.models.users import User
 
 
-app = create_app
+application = create_app()
 
-manager = Manager(app)
+manager = Manager(application.app)
 TEST_CMD = "py.test tests"
 
 
@@ -46,7 +46,7 @@ class WSGI(Server):
                  threaded, processes, passthrough_errors):
 
         if use_debugger is None:
-            use_debugger = app.app.debug
+            use_debugger = app.debug
 
         if use_debugger is None:
             use_debugger = True
@@ -54,7 +54,7 @@ class WSGI(Server):
         if use_reloader is None:
             use_reloader = use_debugger
 
-        run_simple(host, port, app,
+        run_simple(host, port, application,
                    use_debugger=use_debugger,
                    use_reloader=use_reloader,
                    threaded=threaded,
@@ -66,7 +66,13 @@ def _make_context():
     """Return context dict for a shell session so you can access
     app, db, and the User model by default.
     """
-    return {'app': app, 'db': db, 'User': User}
+    return {
+        'app': application,
+        'api': application.mounts['/api'],
+        'frontend': application.app,
+        'db': db,
+        'User': User
+    }
 
 @manager.command
 def test():

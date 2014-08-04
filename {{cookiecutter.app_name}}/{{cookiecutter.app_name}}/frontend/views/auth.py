@@ -26,9 +26,9 @@ class AuthView(FlaskView):
         """
         if not current_user.is_authenticated():
             return jsonify({
-                "status": 403,
+                "status": 401,
                 "message": "No user authenticated",
-            }), 403
+            }), 401, {"WWW-Authenticate": "None"}
         options = request_options.parse_args()
         content_json = options.get('Content-Type') == 'application/json'
         if not content_json:

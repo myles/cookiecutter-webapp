@@ -30,15 +30,15 @@ cssmin>=0.1.4
 jsmin>=2.0.4
 
 # Views
-Flask-Classy>=0.6.10
+# Flask-Classy>=0.6.10
+-e git://github.com/ryanolson/flask-classy.git@8262392acbec28ed957518f94ce4facb10fca157#egg=Flask_Classy-origin/develop
 
 # Mail
 Flask-Mail>=0.9.0
 
 # Auth
-# Flask-Security>=1.7.3
--e git+git@github.com:ryanolson/flask-security.git@b9632720308b957965ad71120256e594092f05f1#egg=Flask_Security-pwd_context
-Flask-JWT>=0.2.0
+Flask-Security>=1.7.3
+-e git+git@github.com:ryanolson/flask-jwt.git@6eb2f4aef6653cc78d30e0a1d15da5134427f914#egg=Flask_JWT-401_on_expired
 passlib>=1.6.2
 py-bcrypt>=0.4
 

@@ -45,8 +45,7 @@ SECURITY_POST_RESET_VIEW = None
 # Flask-Security options
 SECURITY_FLASH_MESSAGES = True
 SECURITY_PASSWORD_HASH = 'bcrypt'
-SECURITY_PASSWORD_SALT = None
-SECURITY_PASSWORD_NO_SALT = True
+SECURITY_PASSWORD_SALT = 'another super secret key'
 
 # NOTE: We are supplying our own password context from passlib; no additional
 # password salts are requried. We have to override the default of

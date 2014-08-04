@@ -19,4 +19,5 @@ require.config {
       exports: '$'
 }
 
-require ['utils/backbone-sync-jwt']
+require ['utils/bootstrap-basics']
+require ['utils/backbone-ajax-jwt']
