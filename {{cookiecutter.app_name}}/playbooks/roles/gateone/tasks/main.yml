@@ -1,0 +1,41 @@
+{%- raw -%}
+---
+  - name: create gateone directory
+    file: path={{ gateone_path }} state=directory
+
+  - name: install python components
+    pip: name={{ item }} state=latest virtualenv={{ gateone_path }}/venv
+    with_items:
+      - tornado
+      - kerberos
+    notify:
+      - restart gateone
+
+  - name: checkout a copy of liftoff/gateone
+    git: repo=https://github.com/liftoff/GateOne dest={{ gateone_path }}/src
+    notify:
+      - restart gateone
+
+  - name: install gateone
+    shell: "{{ gateone_path }}/venv/bin/python setup.py install"
+    args:
+      chdir: "{{ gateone_path }}/src"
+
+  - name: create /etc/gateone/conf.d
+    file: path=/etc/gateone/conf.d state=directory
+
+  - name: gateone config files
+    template: src={{ item }} dest=/etc/gateone/conf.d/{{ item }}
+    with_items:
+      - 10server.conf
+      - 20authentication.conf
+      - 30api_keys.conf
+    notify:
+      - restart gateone
+
+  - name: gateone supervisor config
+    template: src=gateone.ini dest=/etc/supervisor/gateone.ini
+    notify:
+      - restart gateone
+
+{%- endraw -%}

@@ -1,0 +1,23 @@
+---
+  - name: install supervisor
+    pip: name=supervisor state=latest
+    notify:
+      - restart supervisor
+
+  - name: create /etc/supervisor
+    file: path=/etc/supervisor state=directory
+
+  - name: create supervisord.conf
+    template: src=supervisord.conf dest=/etc/supervisord.conf
+    notify:
+      - restart supervisor
+
+  - name: create supervisor.conf
+    template: src=supervisor.conf dest=/etc/init/supervisor.conf
+    notify:
+      - restart supervisor
+
+  - name: link init.d script
+    file: src=/lib/init/upstart-job dest=/etc/init.d/supervisor state=link
+    notify:
+      - restart supervisor
