@@ -11,7 +11,7 @@
 
   vars:
     - app_debug: "True"
-    - app_instance_path: "/vagrant/instance"
+    - app_instance_path: "/vagrant/instance.dev"
     - redis_server: "{{ app_name }}"
     - postgres_server: "{{ app_name }}"
 
@@ -20,6 +20,8 @@
     - postgres
     - redis
     - redis-cache
+    - nginx
+    - supervisor
 
   tasks:
     - name: create postgres user 
@@ -36,4 +38,6 @@
     - name: generate instance configuration
       template: src=templates/settings.cfg 
                 dest={{ app_instance_path }}/settings.cfg
-{%- endraw %}
+
+
+{%- endraw -%}

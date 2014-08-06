@@ -31,7 +31,7 @@ jsmin>=2.0.4
 
 # Views
 # Flask-Classy>=0.6.10
--e git://github.com/ryanolson/flask-classy.git@8262392acbec28ed957518f94ce4facb10fca157#egg=Flask_Classy-origin/develop
+-e git://github.com/ryanolson/flask-classy.git@8262392acbec28ed957518f94ce4facb10fca157#egg=Flask_Classy-origin_develop
 
 # Mail
 Flask-Mail>=0.9.0

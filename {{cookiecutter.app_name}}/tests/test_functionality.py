@@ -90,9 +90,8 @@ class TestLoggingIn:
         assert resp.status_code == 415
 
     def test_auth_jwt_token_fails_without_logged_in_user(self, user, testapp):
-        testapp.reset()
         resp = testapp.post_json("/auth/jwt/token", {}, expect_errors=True)
-        assert resp.status_code == 403
+        assert resp.status_code == 401
 
 
 class TestRegistering:

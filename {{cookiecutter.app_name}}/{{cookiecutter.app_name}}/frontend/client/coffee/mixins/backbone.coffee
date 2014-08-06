@@ -1,3 +1,5 @@
+# React Mixin that binds Backbone events to the view
+
 define ['module'], (module) ->
 
   BackboneMixin =
