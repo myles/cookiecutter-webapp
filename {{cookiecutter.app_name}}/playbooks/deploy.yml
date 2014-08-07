@@ -58,6 +58,19 @@
       notify:
         - restart {{ app_name }}
 
+    - name: create database migrations
+      command: /{{ app_path }}/venv/bin/python manage.py db init
+               creates={{ app_path }}/src/migrations/alembic.ini
+               chdir={{ app_path }}/src
+      environment:
+        "{{ app_name|upper }}_INSTANCE_PATH: {{ app_instance_path }}"
+
+    - name: update database schema
+      command: /{{ app_path }}/venv/bin/python manage.py db upgrade
+               chdir={{ app_path }}/src
+      environment:
+        "{{ app_name|upper }}_INSTANCE_PATH: {{ app_instance_path }}"
+
     - name: configure supervisor script for {{ app_name }}
       template: src=templates/supervisor/{{ app_name }}.ini
                 dest=/etc/supervisor/{{ app_name }}.ini
