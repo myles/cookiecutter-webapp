@@ -31,14 +31,14 @@ jsmin>=2.0.4
 
 # Views
 # Flask-Classy>=0.6.10
--e git://github.com/ryanolson/flask-classy.git@8262392acbec28ed957518f94ce4facb10fca157#egg=Flask_Classy-origin_develop
+-e git+https://github.com/ryanolson/flask-classy.git#egg=Flask-Classy-devel
 
 # Mail
 Flask-Mail>=0.9.0
 
 # Auth
 Flask-Security>=1.7.3
--e git+git@github.com:ryanolson/flask-jwt.git@6eb2f4aef6653cc78d30e0a1d15da5134427f914#egg=Flask_JWT-401_on_expired
+-e git+https://github.com/ryanolson/flask-jwt.git#egg=Flask-JWT-devel
 passlib>=1.6.2
 py-bcrypt>=0.4
 
@@ -53,3 +53,6 @@ wsgiref>=0.1.2
 
 # Error Handling
 raven>=5.0.0
+
+# Debug toolbar
+Flask-DebugToolbar==0.9.0

@@ -1,6 +1,7 @@
 {
   "app_name": "{{ cookiecutter.app_name }}",
   "AppName": "{{ cookiecutter.AppName }}",
+  "app_repo": "{{ cookiecutter.app_repo }}",
   "app_url": "{{ cookiecutter.app_url }}",
   "project_name": "{{ cookiecutter.project_name }}",
   "author": "{{ cookiecutter.author }}",

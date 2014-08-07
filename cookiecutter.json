@@ -1,6 +1,7 @@
 {
 	"app_name": "webapp",
   "AppName": "WebApp",
+  "app_repo": "git@github.com/ryanolson/webapp",
   "app_url": "https://webapp.ryanolson.me",
 	"project_name": "My Webapp",
 	"author": "Ryan Olson",

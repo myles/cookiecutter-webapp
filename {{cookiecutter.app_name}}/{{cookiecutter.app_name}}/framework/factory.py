@@ -37,13 +37,8 @@ def create_app(package_name, package_path, settings_override=None,
     # Instance Path
     instance_path = os.environ.get("{{ cookiecutter.app_name | upper }}_INSTANCE_PATH", None)
 
-    # Create App
-    if instance_path:
-        app = Flask(package_name, instance_path=instance_path)
-        _log.info("Flask initialized with instance path: %s", instance_path)
-    else:
-        app = Flask(package_name, instance_relative_config=True)
-        _log.info("Flask initialized using a relative instance path")
+    app = Flask(package_name, instance_relative_config=True,
+                instance_path=instance_path)
 
     # Initialize settings
     app.config.from_object("{{ cookiecutter.app_name }}.settings")

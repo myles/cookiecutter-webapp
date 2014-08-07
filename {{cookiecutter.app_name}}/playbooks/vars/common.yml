@@ -1,2 +1,4 @@
 ---
 app_name: {{ cookiecutter.app_name }}
+app_repo: {{ cookiecutter.app_repo }}
+app_host: {{ cookiecutter.vagrant_ipv4 }}

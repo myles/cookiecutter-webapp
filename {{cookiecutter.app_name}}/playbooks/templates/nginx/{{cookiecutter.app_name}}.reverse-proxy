@@ -1,0 +1,60 @@
+{%- raw -%}
+upstream {{ app_name }}_app {
+  server unix:{{ app_path }}/instance/{{ app_name }}.socket;
+}
+
+server {
+  listen 80;
+
+  # listen on both hosts
+  server_name {{ app_host }} www.{{ app_host }};
+
+  include h5bp/directive-only/ssl.conf;
+
+  # and redirect to the https host (declared below)
+  # avoiding http://www -> https://www -> https:// chain.
+  return 301 https://{{ app_host }}$request_uri;
+}
+
+server {
+  listen 443 ssl spdy;
+
+  # listen on the wrong host
+  server_name www.{{ app_host }};
+
+  ssl_certificate {{ app_path }}/certs/server.crt;
+  ssl_certificate_key {{ app_path }}/certs/server.key;
+
+  include h5bp/directive-only/ssl.conf;
+
+  # and redirect to the non-www host (declared below)
+  return 301 https://{{ app_host }}$request_uri;
+}
+
+server {
+  listen 443 ssl spdy;
+
+  # The host name to respond to
+  server_name {{ app_host }};
+
+  access_log {{ app_path }}/logs/nginx-access.log main;
+
+  ssl_certificate {{ app_path }}/certs/server.crt;
+  ssl_certificate_key {{ app_path }}/certs/server.key;
+
+  include h5bp/directive-only/ssl.conf;
+
+  location / {
+    proxy_pass http://{{ app_name }}_app;
+    # proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+    proxy_redirect off;
+    proxy_buffering off;
+    proxy_set_header        Host              $host;
+    proxy_set_header        X-Real-IP         $remote_addr;
+    proxy_set_header        X-Forwarded-For   $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto $scheme;
+    proxy_set_header        X-Forwarded-Ssl   on;
+  }
+
+}
+{%- endraw -%}
