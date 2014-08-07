@@ -80,7 +80,7 @@ def test():
     status = subprocess.call(TEST_CMD, shell=True)
     sys.exit(status)
 
-manager.add_command('server', WSGI())
+manager.add_command('server', WSGI(host='0.0.0.0'))
 manager.add_command('worker', Worker())
 manager.add_command('shell', Shell(make_context=_make_context))
 manager.add_command('db', MigrateCommand)
