@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-    manage
-    {{ "~" * "manage"|count }}
+    {{ cookiecutter.app_name }}.manage
+    {{ "~" * (cookiecutter.app_name ~ ".manage")|count }}
 
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
+
+    templated from https://github.com/ryanolson/cookiecutter-webapp
 """
 import os
 import sys

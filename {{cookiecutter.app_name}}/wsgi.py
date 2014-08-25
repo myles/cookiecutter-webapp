@@ -9,6 +9,8 @@
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
+
+    templated from https://github.com/ryanolson/cookiecutter-webapp
 """
 from flask.ext.script import Command
 from werkzeug.serving import run_simple

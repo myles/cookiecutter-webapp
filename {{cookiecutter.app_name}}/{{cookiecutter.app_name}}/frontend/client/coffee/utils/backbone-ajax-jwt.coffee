@@ -77,5 +77,3 @@ require ['backbone', 'module'], (Backbone, module) ->
     args[0] = extender(args[0])
     Backbone.$.ajax.apply(Backbone.$, args)
 
-  console.log "backbone-ajax-jwt initialized"
-

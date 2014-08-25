@@ -6,6 +6,8 @@
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
+
+    templated from https://github.com/ryanolson/cookiecutter-webapp
 """
 from flask import current_app, jsonify, request
 from flask.ext.classy import FlaskView, route

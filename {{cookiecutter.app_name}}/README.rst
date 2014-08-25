@@ -8,15 +8,9 @@ Quickstart
 
 ::
 
-    mkvirtualenv {{ cookiecutter.app_name }}
-    pip install -r requirements/develop.txt
-    bower install
     npm install
     grunt
-    python manage.py db init
-    python manage.py db migrate
-    python manage.py db upgrade
-    python manage.py server
+    vagrant up
 
 
 Shell

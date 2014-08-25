@@ -8,6 +8,8 @@
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
+
+    templated from https://github.com/ryanolson/cookiecutter-webapp
 """
 from flask.ext.script import Command, Option
 from {{ cookiecutter.app_name }}.tasks import celery

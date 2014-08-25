@@ -6,8 +6,9 @@
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}
     :license: {{ cookiecutter.license }}, see LICENSE for more details.
+
+    templated from https://github.com/ryanolson/cookiecutter-webapp
 """
-from flask.ext.login import login_required
 from flask.ext.restful import abort, reqparse
 
 from ..base import BaseAPI, BaseResource, secure_endpoint
