@@ -13,7 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     dev.vm.box = "hashicorp/precise64"
     dev.vm.network "private_network", ip: "{{ cookiecutter.vagrant_ipv4 }}"
     dev.vm.provision :ansible do |ansible|
-      ansible.playbook = "playbooks/deploy.yml"
+      ansible.playbook = "playbooks/develop.yml"
       ansible.inventory_path = "playbooks/hosts"
       ansible.ask_vault_pass = true
       ansible.limit = "all"

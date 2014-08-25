@@ -72,8 +72,8 @@ module.exports = (grunt) ->
 
   grunt.loadNpmTasks 'grunt-bowercopy'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
-  grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-coffee-react'
+  grunt.loadNpmTasks 'grunt-contrib-watch'
 
   grunt.registerTask 'default', ['bowercopy', 'coffee', 'cjsx']
   grunt.registerTask 'develop', ['default, watch:app']

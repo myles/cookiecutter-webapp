@@ -11,6 +11,7 @@ Requirements
 
 - `vagrant <http://vagrantup.com>`_
 - `ansible <http://ansible.com>`_
+- `grunt <http://gruntjs.com>`_
 - `bower <http://bower.io>`_
 
 
@@ -24,14 +25,22 @@ Use it now
 You will be asked about your basic info (name, project name, app name, etc.). This
 info will be used to generate your new project.
 
+::
+
+    $ npm install
+    $ grunt
+    $ vagrant up
 
 Features
 --------
 
 - Vagrant to bring up a local development server
 - Ansible for provisioning
+- Flask WSGI application
+- Grunt and Bower to manage web assets
+- Stateless RESTful API
 - Flask-SQLAlchemy with basic User model
-- Secure logins via Flask-Security and Flask-WTForms
+- Secure logins via Flask-Security, Flask-WTForms
 - Easy database migrations with Flask-Migrate
 - Bootstrap 3 and Font Awesome 4 with starter templates
 - CSS and JS minification using Flask-Assets

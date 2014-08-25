@@ -10,8 +10,9 @@
 {%- raw %}
 
   vars:
-    - app_debug: "True"
-    - app_instance_path: "/vagrant/instance.dev"
+    - app_debug: "False"
+    - app_path: "/srv/webapps/{{ app_name }}"
+    - app_instance_path: "{{ app_path }}/instance"
     - redis_server: "{{ app_name }}"
     - postgres_server: "{{ app_name }}"
 
@@ -32,12 +33,58 @@
       postgresql_db: name={{ app_name }} owner={{ app_name }}
       sudo_user: postgres
 
-    - name: create instance directory
-      file: path={{ app_instance_path }} state=directory
+    - name: create {{ app_name }} directories
+      file: path={{ app_path }}/{{ item }} state=directory
+      with_items:
+        - certs
+        - instance
+        - logs
 
     - name: generate instance configuration
       template: src=templates/settings.cfg 
                 dest={{ app_instance_path }}/settings.cfg
 
+#   - name: checkout source code
+#     git: repo={{ app_repo }} dest={{ app_path }}/src
+#     notify:
+#       - update database
+#       - restart {{ app_name }}
 
+    - name: symlink the source
+      file: src=/vagrant dest={{ app_path }}/src state=link
+
+    - name: install python requirements
+      pip: requirements=requirements.txt chdir={{ app_path }}/src
+           virtualenv={{ app_path }}/venv
+      notify:
+        - update database
+        - restart {{ app_name }}
+
+    - name: configure supervisor script for {{ app_name }}
+      template: src=templates/supervisor/{{ app_name }}.ini
+                dest=/etc/supervisor/{{ app_name }}.ini
+      notify:
+        - restart {{ app_name }}
+
+    - name: create self-signed ssl cert
+      command: openssl req -new -nodes -x509 -subj "/C=US/ST=Colorado/L=Golden/O=IT/CN={{ ansible_eth1['ipv4']['address'] }}" -days 3650 -keyout {{ app_path }}/certs/server.key -out {{ app_path }}/certs/server.crt -extensions v3_ca creates={{ app_path }}/certs/server.crt
+      notify:
+        - restart nginx
+
+    - name: configure nginx reverse proxy
+      template: src=templates/nginx/{{ app_name }}.reverse-proxy
+                dest=/etc/nginx/sites-enabled/{{ app_name }}.reverse-proxy
+      notify:
+        - restart nginx
+
+  handlers:
+    - name: update database
+      command: /{{ app_path }}/venv/bin/python manage.py db upgrade
+               chdir={{ app_path }}/src {% endraw %}
+      environment:
+        {{ cookiecutter.app_name|upper }}_INSTANCE_PATH: {% raw %}"{{ app_instance_path }}"
+
+    - name: restart {{ app_name }}
+      supervisorctl: name={{ app_name }} state=restarted
+      
 {%- endraw -%}
