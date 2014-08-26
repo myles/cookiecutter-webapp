@@ -66,6 +66,8 @@ development, testing and deployment.
 - [Vagrant](http://vagrantup.com) to bring up a local development server
 - [Ansible](http://ansible.com) for provisioning
 - [Flask](https://github.com/mitsuhiko/flask) WSGI application
+- [Nginx](http://nginx.com) configured reverse-proxy with [h5bp/server-configs-nginx](https://github.com/h5bp/server-configs-nginx) best practices
+- [PostgreSQL](http://www.postgresql.org) running on the provisioned VM
 - [Grunt](http://gruntjs.com) and [Bower](http://bower.io) to manage web assets
 - [Pragmatic Stateless RESTful API](http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api)
   using a combination of [Flask-Classy](https://github.com/apiguy/flask-classy) and
