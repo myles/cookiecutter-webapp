@@ -19,7 +19,7 @@ lib64
 bower_components
 
 # Instance
-instance
+instance-vagrant
 
 # Installer logs
 pip-log.txt

@@ -10,7 +10,7 @@
 {%- raw %}
 
   vars:
-    - app_debug: "False"
+    - app_debug: True
     - app_path: "/srv/webapps/{{ app_name }}"
     - app_instance_path: "{{ app_path }}/instance"
     - redis_server: "{{ app_name }}"
@@ -39,10 +39,16 @@
         - certs
         - instance
         - logs
+        - src/instance-vagrant
 
-    - name: generate instance configuration
-      template: src=templates/settings.cfg 
+    - name: generate server instance configuration
+      template: src=templates/settings.cfg
                 dest={{ app_instance_path }}/settings.cfg
+
+    # development only
+    - name: generate local instance configuration using vagrant server(s)
+      template: src=templates/settings.cfg
+                dest={{ app_path }}/src/instance-vagrant/settings.cfg
 
 #   - name: checkout source code
 #     git: repo={{ app_repo }} dest={{ app_path }}/src
