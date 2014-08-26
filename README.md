@@ -79,7 +79,7 @@ development, testing and deployment.
 
 ## Inspiration
 
-- [Best Practicesfor Designing a Pragmatic RESTful API](http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api)
+- [Best Practices for Designing a Pragmatic RESTful API](http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api)
 - [How I Structure My Flask
   Applications](http://mattupstate.com/python/2013/06/26/how-i-structure-my-flask-applications.html)
   by Matt Wright

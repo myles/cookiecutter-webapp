@@ -79,8 +79,9 @@ def _make_context():
 @manager.command
 def test():
     """Run the tests."""
-    status = subprocess.call(TEST_CMD, shell=True)
-    sys.exit(status)
+    import pytest
+    exit_code = pytest.main(['tests', '--verbose'])
+    return exit_code
 
 manager.add_command('server', WSGI(host='0.0.0.0'))
 manager.add_command('worker', Worker())
