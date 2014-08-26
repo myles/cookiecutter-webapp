@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    {{ cookiecutter.app_name }}.base
-    {{ "~" * (cookiecutter.app_name ~ ".base")|count }}
+    {{ cookiecutter.app_name }}.api.base
+    {{ "~" * (cookiecutter.app_name ~ ".api.base")|count }}
 
     :author: {{ cookiecutter.author }}
     :copyright: © {{ cookiecutter.copyright }}
