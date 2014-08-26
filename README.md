@@ -26,13 +26,13 @@ You will be asked some basic info about the project you wish to create:
 * `AppName`: CamelCase name of the application
 * `project_name`: name of your applications, human form
 * `license`: choose from `MIT`, `GPLv3`, `GPLv2`, `Apache`, `ISC`, `Mozilla`
-  ** you can write in any string here; however you will need to provide the
-     details for the LICENSE file
+    - you can write in any string here; however you will need to provide the
+      details for the LICENSE file
 * `author`
 * `email`
 * `company`
 * `copyright`: usually takes the form of "Year, Company/Author"
-   ** note: © prepended
+    - note: © prepended
 * `app_repo`: git repository for storing your code
 * `app_url`: the url for the hosted project
 * `vagrant_ipv4`: the host-only IP address for the vagrant-managed virtual
