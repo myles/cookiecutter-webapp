@@ -98,6 +98,7 @@ development, testing and deployment.
 - [Multi Server Flask Application Development Environment with Vagrant and Ansible](http://mattupstate.com/python/devops/2012/08/30/multi-server-flask-application-development-enviornment-with-vagrant-and-ansible.html)
 - [cookiecutter-flask](https://github.com/sloria/cookiecutter-flask/)
   by Steven Loria
+- [Miguel Grinberg's most excellent blog](http://blog.miguelgrinberg.com)
 
 
 ## Good Reads
