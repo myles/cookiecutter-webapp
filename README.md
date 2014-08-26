@@ -50,6 +50,10 @@ grunt
 vagrant up
 ```
 
+Note: you might get an error on `npm install` where some of the dependencies want an
+earlier version of grunt.  Try the `grunt` command and if all goes well, you are on
+your way to `vagrant up`.
+
 After Vagrant and Ansible do their work, direct your browser to
 `https://192.168.100.10` or whatever IP address you specifed for `vagrant_ipv4`.
 
@@ -83,7 +87,7 @@ development, testing and deployment.
 
 ## Inspiration
 
-- [Best Practices for Designing a Pragmatic RESTful API](http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api)
+- [Best Practices for Designing a Pragmatic RESTful API](http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api) by Vinay Sahni
 - [How I Structure My Flask
   Applications](http://mattupstate.com/python/2013/06/26/how-i-structure-my-flask-applications.html)
   by Matt Wright
