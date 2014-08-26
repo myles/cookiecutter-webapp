@@ -39,16 +39,10 @@
         - certs
         - instance
         - logs
-        - src/instance-vagrant
 
     - name: generate server instance configuration
       template: src=templates/settings.cfg
                 dest={{ app_instance_path }}/settings.cfg
-
-    # development only
-    - name: generate local instance configuration using vagrant server(s)
-      template: src=templates/settings.cfg
-                dest={{ app_path }}/src/instance-vagrant/settings.cfg
 
 #   - name: checkout source code
 #     git: repo={{ app_repo }} dest={{ app_path }}/src
@@ -58,6 +52,17 @@
 
     - name: symlink the source
       file: src=/vagrant dest={{ app_path }}/src state=link
+
+    # development only
+    - name: create instance-vagrant directory
+      file: path={{ app_path }}/{{ item }} state=directory
+      with_items:
+        - src/instance-vagrant
+
+    # development only
+    - name: generate local instance configuration using vagrant server(s)
+      template: src=templates/settings.cfg
+                dest={{ app_path }}/src/instance-vagrant/settings.cfg
 
     - name: install python requirements
       pip: requirements=requirements.txt chdir={{ app_path }}/src

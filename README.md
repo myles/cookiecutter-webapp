@@ -22,20 +22,24 @@ cookiecutter https://github.com/ryanolson/cookiecutter-webapp.git
 
 You will be asked some basic info about the project you wish to create:
 
-* `app_name`: snake case name of the application
-* `AppName`: CamelCase name of the application
-* `project_name`: name of your applications, human form
-* `license`: choose from `MIT`, `GPLv3`, `GPLv2`, `Apache`, `ISC`, `Mozilla`
-    - you can write in any string here; however you will need to provide the
-      details for the LICENSE file
-* `author`
-* `email`
-* `company`
-* `copyright`: usually takes the form of "Year, Company/Author"
-    - note: © prepended
-* `app_repo`: git repository for storing your code
-* `app_url`: the url for the hosted project
-* `vagrant_ipv4`: the host-only IP address for the vagrant-managed virtual
+- `app_name`: snake case name of the application
+- `AppName`: CamelCase name of the application
+- `project_name`: name of your applications, human form
+- `license`
+    * `MIT`
+    * `GPLv3`
+    * `GPLv2`
+    * `Apache`
+    * `ISC`
+    * `Mozilla`
+    * any other license - you will have to add the text to the LICENSE file
+- `author`
+- `email`
+- `company`
+- `copyright`: usually takes the form of "Year, Company/Author" (@ will be prepended)
+- `app_repo`: git repository for storing your code
+- `app_url`: the url for the hosted project
+- `vagrant_ipv4`: the host-only IP address for the vagrant-managed virtual
    machine that will be created and provisioned. 
 
 Next, change directories to your newly created `app_name` project directory
