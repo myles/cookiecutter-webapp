@@ -75,6 +75,7 @@ development, testing and deployment.
 - [Flask-SQLAlchemy](https://github.com/mitsuhiko/flask-sqlalchemy) with basic User model
 - Secure logins via [Flask-Security](https://github.com/mattupstate/flask-security),
   [Flask-WTForms](https://github.com/lepture/flask-wtf)
+- Revocable JSON Web Tokens (JWT) for API authentication via [Flask-JWT](https://github.com/mattupstate/flask-jwt)
 - Easy database migrations with [Flask-Migrate](https://github.com/miguelgrinberg/Flask-Migrate)
 - [Twitter's Bootstrap 3](http://getbootstrap.com) and
   [Font Awesome 4](http://fortawesome.github.io/Font-Awesome/)
