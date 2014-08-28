@@ -1,2 +1,10 @@
 ---
-postgres_version: 9.1
+postgresql:
+  version: 9.3
+
+  user: postgres
+  group: postgres
+
+  config:
+    listen_addresses: "*"
+    shared_buffers: 24MB

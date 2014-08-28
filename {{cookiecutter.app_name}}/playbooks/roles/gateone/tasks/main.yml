@@ -4,6 +4,8 @@
     file: path={{ gateone_path }}/items state=directory
     with_items:
       - users
+    tags:
+      - configuration
 
   - name: install python components
     pip: name={{ item }} state=latest virtualenv={{ gateone_path }}/venv
@@ -12,19 +14,27 @@
       - kerberos
     notify:
       - restart gateone
+    tags:
+      - packages
 
   - name: install supervisor runscript
     template: src=gateone.ini dest=/etc/supervisor/gateone.ini
     notify:
       - restart gateone
+    tags:
+      - configuration
 
   - name: install from github
     pip: name="git+https://github.com/liftoff/GateOne#egg=GateOne"
     notify:
       - restart gateone
+    tags:
+      - packages
 
   - name: create /opt/gateone/conf.d
     file: path=/opt/gateone/conf.d state=directory
+    tags:
+      - configuration
 
   - name: install config files
     template: src={{ item }} dest=/opt/gateone/conf.d/{{ item }}
@@ -34,5 +44,7 @@
       - 30api_keys.conf
     notify:
       - restart gateone
+    tags:
+      - configuration
 
 {%- endraw -%}

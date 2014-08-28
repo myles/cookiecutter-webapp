@@ -2,6 +2,8 @@
 ---
   - name: install python-software-properties
     apt: pkg=python-software-properties state=present
+    tags:
+      - packages
 
   - name: install python
     apt: pkg={{ item }} state=installed
@@ -9,9 +11,13 @@
       - build-essential
       - python-dev
       - python-setuptools
+    tags:
+      - packages
 
   - name: install pip
     easy_install: name=pip
+    tags:
+      - packages
 
   - name: install/upgrade essential python packages
     pip: name={{ item }} state=latest
@@ -19,5 +25,7 @@
       - pip
       - setuptools
       - virtualenv
+    tags:
+      - packages
 
 {%- endraw -%}

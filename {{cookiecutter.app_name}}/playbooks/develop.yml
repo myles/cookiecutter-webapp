@@ -94,6 +94,8 @@
                chdir={{ app_path }}/src {% endraw %}
       environment:
         {{ cookiecutter.app_name|upper }}_INSTANCE_PATH: {% raw %}"{{ app_instance_path }}"
+      notify:
+        - restart {{ app_name }}
 
     - name: restart {{ app_name }}
       supervisorctl: name={{ app_name }} state=restarted
