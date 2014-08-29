@@ -9,8 +9,6 @@ A Flask template for [cookiecutter](https://github.com/audreyr/cookiecutter).
 - [vagrant](http://vagrantup.com)
 - [ansible](http://ansible.com)
 - [virtualbox](https://www.virtualbox.org/wiki/Downloads)
-- [grunt](http://gruntjs.com)
-- [bower](http://bower.io)
 
 
 ## Try it now
@@ -45,14 +43,8 @@ You will be asked some basic info about the project you wish to create:
 Next, change directories to your newly created `app_name` project directory
 
 ```
-npm install
-grunt
 vagrant up
 ```
-
-Note: you might get an error on `npm install` where some of the dependencies want an
-earlier version of grunt.  Try the `grunt` command and if all goes well, you are on
-your way to `vagrant up`.
 
 After Vagrant and Ansible do their work, direct your browser to
 `https://192.168.100.10` or whatever IP address you specifed for `vagrant_ipv4`.
@@ -99,12 +91,6 @@ development, testing and deployment.
 - [cookiecutter-flask](https://github.com/sloria/cookiecutter-flask/)
   by Steven Loria
 - [Miguel Grinberg's most excellent blog](http://blog.miguelgrinberg.com)
-
-
-## Good Reads
-
--   [Optimizing RequireJS
-    applications](http://www.webdeveasy.com/optimize-requirejs-projects/)
 
 
 ## License

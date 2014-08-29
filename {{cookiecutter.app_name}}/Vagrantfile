@@ -6,11 +6,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Development Server
   config.vm.define "{{ cookiecutter.app_name }}", primary: true do |dev|
     dev.vm.provider :virtualbox do |virtualbox|
-      virtualbox.customize ["modifyvm", :id, "--memory", "128"]
+      virtualbox.customize ["modifyvm", :id, "--memory", "384"]
       virtualbox.customize ["modifyvm", :id, "--cpus", "1"]
     end
     dev.vm.hostname = "{{ cookiecutter.app_name }}"
-    dev.vm.box = "hashicorp/precise64"
+    dev.vm.box = "ubuntu/trusty64"
     dev.vm.network "private_network", ip: "{{ cookiecutter.vagrant_ipv4 }}"
     dev.vm.provision :ansible do |ansible|
       ansible.playbook = "playbooks/develop.yml"

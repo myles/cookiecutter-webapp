@@ -3,3 +3,5 @@
     apt: name=rabbitmq-server state=latest
     notify:
       - restart rabbitmq
+    tags:
+      - packages
