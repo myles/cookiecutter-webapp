@@ -22,6 +22,7 @@
     - redis
     - redis-cache
     - nginx
+    - nodejs
     - supervisor
 
   tasks:
@@ -68,32 +69,65 @@
       pip: requirements=requirements.txt chdir={{ app_path }}/src
            virtualenv={{ app_path }}/venv
       notify:
-        - update database
-        - restart {{ app_name }}
+        - reload {{ app_name }}
+
+    - name: install node requirements (global)
+      npm: name={{ item }} state=latest global=yes
+      with_items:
+        - bower
+        - coffee-script
+        - coffee-react
+        - grunt
+        - grunt-cli
+      tags:
+        - packages
+
+    - name: install node requirements ({{ app_name }})
+      npm: path={{ app_path }}/src state=latest
+      tags:
+        - packages
 
     - name: configure supervisor script for {{ app_name }}
       template: src=templates/supervisor/{{ app_name }}.ini
                 dest=/etc/supervisor/{{ app_name }}.ini
       notify:
         - restart {{ app_name }}
+      tags:
+        - configuration
 
     - name: create self-signed ssl cert
       command: openssl req -new -nodes -x509 -subj "/C=US/ST=Colorado/L=Golden/O=IT/CN={{ ansible_eth1['ipv4']['address'] }}" -days 3650 -keyout {{ app_path }}/certs/server.key -out {{ app_path }}/certs/server.crt -extensions v3_ca creates={{ app_path }}/certs/server.crt
       notify:
         - restart nginx
+      tags:
+        - configuration
 
     - name: configure nginx reverse proxy
       template: src=templates/nginx/{{ app_name }}.reverse-proxy
                 dest=/etc/nginx/sites-enabled/{{ app_name }}.reverse-proxy
       notify:
         - restart nginx
+      tags:
+        - configuration
 
   handlers:
+    - name: reload {{ app_name }}
+      shell: echo reload {{ app_name }}
+      notify:
+        - update database
+        - execute grunt
+        - restart {{ app_name }}
+
     - name: update database
       command: /{{ app_path }}/venv/bin/python manage.py db upgrade
                chdir={{ app_path }}/src {% endraw %}
       environment:
         {{ cookiecutter.app_name|upper }}_INSTANCE_PATH: {% raw %}"{{ app_instance_path }}"
+      notify:
+        - restart {{ app_name }}
+
+    - name: execute grunt
+      command: grunt chdir={{ app_path }}/src
       notify:
         - restart {{ app_name }}
 
