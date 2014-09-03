@@ -34,7 +34,7 @@
       - packages
 
   - name: install from github
-    pip: name="git+https://github.com/liftoff/GateOne#egg=GateOne"
+    pip: name="git+https://github.com/ryanolson/GateOne#egg=GateOne"
          virtualenv={{ gateone_path }}/venv
     notify:
       - restart gateone
