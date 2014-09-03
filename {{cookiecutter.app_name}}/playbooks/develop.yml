@@ -15,7 +15,7 @@
     - app_instance_path: "{{ app_path }}/instance"
     - redis_server: "{{ app_name }}"
     - postgres_server: "{{ app_name }}"
-    - pkg_state: present
+    - pkg_state: latest
 
   roles:
     - python
