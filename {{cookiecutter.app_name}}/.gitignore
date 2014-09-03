@@ -17,6 +17,7 @@ develop-eggs
 lib
 lib64
 bower_components
+node_modules
 
 # Instance
 instance-vagrant
@@ -46,3 +47,4 @@ docs/_build
 
 .webassets-cache
 .vagrant
+
