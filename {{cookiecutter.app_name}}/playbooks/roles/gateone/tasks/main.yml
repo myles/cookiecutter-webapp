@@ -28,6 +28,7 @@
     with_items:
       - tornado
       - kerberos
+      - futures
     notify:
       - restart gateone
     tags:
