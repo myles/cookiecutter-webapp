@@ -1,9 +1,25 @@
 {%- raw -%}
 ---
   - name: create gateone directories
-    file: path={{ gateone_path }}/items state=directory
+    file: path={{ gateone_path }}/{{ item }} state=directory
     with_items:
+      - logs
       - users
+    tags:
+      - configuration
+
+  - name: install kerberos packages
+    apt: name={{ item }} state={{ pkg_state }}
+    with_items:
+      - libkrb5-dev
+    tags:
+      - packages
+
+  - name: install supervisor runscript
+    template: src=gateone.ini dest=/etc/supervisor/gateone.ini
+    notify:
+      - restart supervisor
+      - restart gateone
     tags:
       - configuration
 
@@ -17,15 +33,9 @@
     tags:
       - packages
 
-  - name: install supervisor runscript
-    template: src=gateone.ini dest=/etc/supervisor/gateone.ini
-    notify:
-      - restart gateone
-    tags:
-      - configuration
-
   - name: install from github
     pip: name="git+https://github.com/liftoff/GateOne#egg=GateOne"
+         virtualenv={{ gateone_path }}/venv
     notify:
       - restart gateone
     tags:
