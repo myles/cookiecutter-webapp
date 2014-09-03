@@ -24,7 +24,7 @@
       - configuration
 
   - name: install python components
-    pip: name={{ item }} state={{ pkg_state }} virtualenv={{ gateone_path }}/venv
+    pip: name={{ item }} state={{ pkg_state }}
     with_items:
       - tornado
       - kerberos
@@ -36,7 +36,6 @@
 
   - name: install from github
     pip: name="git+https://github.com/ryanolson/GateOne#egg=GateOne"
-         virtualenv={{ gateone_path }}/venv
     notify:
       - restart gateone
     tags:
