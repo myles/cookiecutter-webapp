@@ -1,7 +1,7 @@
 {%- raw -%}
 ---
   - name: install packages
-    action: apt pkg={{ item }} state=latest
+    action: apt pkg={{ item }} state={{ pkg_state }}
     with_items:
       - postgresql
       - postgresql-contrib
@@ -10,7 +10,7 @@
       - packages
 
   - name: install python libraries
-    pip: name=psycopg2
+    pip: name=psycopg2 state={{ pkg_state }}
     tags:
       - packages
 
@@ -36,5 +36,8 @@
       - restart postgresql
     tags:
       - configuration
+
+  - name: start postgresql
+    service: name=postgresql state=started enabled=yes
 
 {%- endraw -%}

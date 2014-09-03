@@ -6,7 +6,7 @@
       - packages
 
   - name: install nginx
-    apt: name=nginx state=latest
+    apt: name=nginx state={{ pkg_state }}
     notify:
       - restart nginx
     tags:
@@ -35,5 +35,8 @@
       - restart nginx
     tags:
       - configuration
+
+  - name: start nginx
+    service: name=nginx state=started enabled=yes
 
 {%- endraw -%}

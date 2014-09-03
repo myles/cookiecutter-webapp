@@ -1,5 +1,8 @@
+{%- raw -%}
 ---
   - name: install git
-    apt: name=git state=latest
+    apt: name=git state={{ pkg_state }}
     tags:
       - packages
+
+{%- endraw -%}

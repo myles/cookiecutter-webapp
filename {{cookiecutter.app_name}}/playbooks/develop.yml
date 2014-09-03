@@ -15,6 +15,7 @@
     - app_instance_path: "{{ app_path }}/instance"
     - redis_server: "{{ app_name }}"
     - postgres_server: "{{ app_name }}"
+    - pkg_state: present
 
   roles:
     - python
@@ -66,13 +67,15 @@
                 dest={{ app_path }}/src/instance-vagrant/settings.cfg
 
     - name: install python requirements
-      pip: requirements=requirements.txt chdir={{ app_path }}/src
+      pip: requirements=requirements.txt
+           chdir={{ app_path }}/src
            virtualenv={{ app_path }}/venv
+           state={{ pkg_state }}
       notify:
         - reload {{ app_name }}
 
     - name: install node requirements (global)
-      npm: name={{ item }} state=latest global=yes
+      npm: name={{ item }} state={{ pkg_state }} global=yes
       with_items:
         - bower
         - coffee-script
@@ -83,7 +86,7 @@
         - packages
 
     - name: install node requirements ({{ app_name }})
-      npm: path={{ app_path }}/src state=latest
+      npm: path={{ app_path }}/src state={{ pkg_state }}
       tags:
         - packages
 

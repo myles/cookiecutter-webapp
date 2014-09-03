@@ -1,12 +1,12 @@
 {%- raw -%}
 ---
   - name: install python-software-properties
-    apt: pkg=python-software-properties state=present
+    apt: pkg=python-software-properties state={{ pkg_state }}
     tags:
       - packages
 
   - name: install python
-    apt: pkg={{ item }} state=installed
+    apt: pkg={{ item }} state={{ pkg_state }}
     with_items:
       - build-essential
       - python-dev
@@ -20,7 +20,7 @@
       - packages
 
   - name: install/upgrade essential python packages
-    pip: name={{ item }} state=latest
+    pip: name={{ item }} state={{ pkg_state }}
     with_items:
       - pip
       - setuptools

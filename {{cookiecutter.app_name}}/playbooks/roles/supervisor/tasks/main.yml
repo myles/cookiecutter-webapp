@@ -1,3 +1,4 @@
+{%- raw -%}
 ---
   - name: install supervisor
     pip: name=supervisor state=latest
@@ -31,3 +32,8 @@
       - restart supervisor
     tags:
       - configuration
+
+  - name: start supervisor
+    service: name=supervisor state=started enabled=yes
+
+{%- endraw -%}

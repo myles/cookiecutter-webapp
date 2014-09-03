@@ -8,7 +8,7 @@
       - configuration
 
   - name: install python components
-    pip: name={{ item }} state=latest virtualenv={{ gateone_path }}/venv
+    pip: name={{ item }} state={{ pkg_state }} virtualenv={{ gateone_path }}/venv
     with_items:
       - tornado
       - kerberos

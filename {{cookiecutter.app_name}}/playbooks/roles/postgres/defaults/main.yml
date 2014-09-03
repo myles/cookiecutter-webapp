@@ -1,4 +1,5 @@
 ---
+pkg_state: present
 postgresql:
   version: 9.3
 

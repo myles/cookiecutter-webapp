@@ -1,3 +1,4 @@
+{%- raw -%}
 ---
   - name: install configruation file
     template: src=redis/redis-cache.conf dest=/etc/redis/redis-cache.conf
@@ -19,3 +20,8 @@
       - restart redis-cache
     tags:
       - configuration
+
+  - name: start redis-cache
+    service: name=redis-cache state=started enabled=yes
+
+{%- endraw -%}
