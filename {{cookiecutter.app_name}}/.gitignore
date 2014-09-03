@@ -45,3 +45,4 @@ output/*/index.html
 docs/_build
 
 .webassets-cache
+.vagrant
