@@ -40,4 +40,6 @@
   - name: start postgresql
     service: name=postgresql state=started enabled=yes
 
+  - meta: flush_handlers
+
 {%- endraw -%}
