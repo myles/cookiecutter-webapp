@@ -39,4 +39,6 @@
   - name: start nginx
     service: name=nginx state=started enabled=yes
 
+  - meta: flush_handlers
+
 {%- endraw -%}
