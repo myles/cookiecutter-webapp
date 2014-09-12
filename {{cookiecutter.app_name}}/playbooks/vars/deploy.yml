@@ -1,0 +1,12 @@
+{%- raw -%}
+---
+#
+# edit this file accordingly
+#
+app_repo: git@github.com/username/{{ app_name }}
+app_server: "{{ hostvars[app_name ~ '-dev']['ansible_eth1']['ipv4']['address'] }}"
+nginx_server: "{{ app_server }}"
+postgresql_server: "{{ app_server }}"
+redis_server: "{{ app_server }}"
+redis_cache_server: "{{ app_server }}"
+{%- endraw -%}
