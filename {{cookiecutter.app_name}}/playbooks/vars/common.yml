@@ -1,3 +1,6 @@
 ---
 app_name: {{ cookiecutter.app_name }}
-app_host: {{ cookiecutter.vagrant_ipv4 }}
+{% raw -%}
+app_path: "/srv/webapps/{{ app_name }}"
+app_instance_path: "{{ app_path }}/instance"
+{%- endraw %}

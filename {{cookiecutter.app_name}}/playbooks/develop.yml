@@ -1,9 +1,10 @@
 ---
-- hosts: devservers
+- hosts: devserver
   sudo: True
 
   vars_files:
     - vars/common.yml
+    - vars/develop.yml
     - vars/salts.yml
     - vars/secure.yml
 
@@ -11,11 +12,7 @@
 
   vars:
     - app_debug: True
-    - app_path: "/srv/webapps/{{ app_name }}"
-    - app_instance_path: "{{ app_path }}/instance"
-    - redis_server: "{{ app_name }}"
-    - postgres_server: "{{ app_name }}"
-    - pkg_state: latest
+    - pkg_state: present
 
   roles:
     - python
@@ -99,7 +96,7 @@
         - configuration
 
     - name: create self-signed ssl cert
-      command: openssl req -new -nodes -x509 -subj "/C=US/ST=Colorado/L=Golden/O=IT/CN={{ ansible_eth1['ipv4']['address'] }}" -days 3650 -keyout {{ app_path }}/certs/server.key -out {{ app_path }}/certs/server.crt -extensions v3_ca creates={{ app_path }}/certs/server.crt
+      command: openssl req -new -nodes -x509 -subj "/C=US/ST=Colorado/L=Golden/O=IT/CN={{ nginx_server }}" -days 3650 -keyout {{ app_path }}/certs/server.key -out {{ app_path }}/certs/server.crt -extensions v3_ca creates={{ app_path }}/certs/server.crt
       notify:
         - restart nginx
       tags:

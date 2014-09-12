@@ -7,20 +7,20 @@ server {
   listen 80;
 
   # listen on both hosts
-  server_name {{ app_host }} www.{{ app_host }};
+  server_name {{ app_server }} www.{{ app_server }};
 
   include h5bp/directive-only/ssl.conf;
 
   # and redirect to the https host (declared below)
   # avoiding http://www -> https://www -> https:// chain.
-  return 301 https://{{ app_host }}$request_uri;
+  return 301 https://{{ app_server }}$request_uri;
 }
 
 server {
   listen 443 ssl spdy;
 
   # listen on the wrong host
-  server_name www.{{ app_host }};
+  server_name www.{{ app_server }};
 
   ssl_certificate {{ app_path }}/certs/server.crt;
   ssl_certificate_key {{ app_path }}/certs/server.key;
@@ -28,14 +28,14 @@ server {
   include h5bp/directive-only/ssl.conf;
 
   # and redirect to the non-www host (declared below)
-  return 301 https://{{ app_host }}$request_uri;
+  return 301 https://{{ app_server }}$request_uri;
 }
 
 server {
   listen 443 ssl spdy;
 
   # The host name to respond to
-  server_name {{ app_host }};
+  server_name {{ app_server }};
 
   access_log {{ app_path }}/logs/nginx-access.log main;
 
