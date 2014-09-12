@@ -36,4 +36,6 @@
   - name: start supervisor
     service: name=supervisor state=started enabled=yes
 
+  - meta: flush_handlers
+
 {%- endraw -%}
