@@ -1,6 +1,7 @@
 ---
 app_name: {{ cookiecutter.app_name }}
 {% raw -%}
-app_path: "/srv/webapps/{{ app_name }}"
+webapps_path: /srv/webapps
+app_path: "{{ webapps_path }}/{{ app_name }}"
 app_instance_path: "{{ app_path }}/instance"
 {%- endraw %}
