@@ -1,5 +1,5 @@
 {%- raw -%}
 ---
 pkg_state: present
-gateone_path: {{ webapps_path }}/gateone
+gateone_path: "{{ webapps_path }}/gateone"
 {%- endraw -%}
