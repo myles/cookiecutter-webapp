@@ -1,17 +1,17 @@
 ---
-- hosts: devserver
+- hosts: server
   sudo: True
 
   vars_files:
     - vars/common.yml
-    - vars/develop.yml
-    - vars/salts-develop.yml
+    - vars/deploy.yml
+    - vars/salts.yml
     - vars/secure.yml
 
 {%- raw %}
 
   vars:
-    - app_debug: True
+    - app_debug: False
     - pkg_state: present
 
   roles:
@@ -43,25 +43,11 @@
       template: src=templates/settings.cfg
                 dest={{ app_instance_path }}/settings.cfg
 
-#   - name: checkout source code
-#     git: repo={{ app_repo }} dest={{ app_path }}/src
-#     notify:
-#       - update database
-#       - restart {{ app_name }}
-
-    - name: symlink the source
-      file: src=/vagrant dest={{ app_path }}/src state=link
-
-    # development only
-    - name: create instance-vagrant directory
-      file: path={{ app_path }}/{{ item }} state=directory
-      with_items:
-        - src/instance-vagrant
-
-    # development only
-    - name: generate local instance configuration using vagrant server(s)
-      template: src=templates/settings.cfg
-                dest={{ app_path }}/src/instance-vagrant/settings.cfg
+    - name: checkout source code
+      git: repo={{ app_repo }} dest={{ app_path }}/src version={{ app_version }}
+      notify:
+        - update database
+        - restart {{ app_name }}
 
     - name: install python requirements
       pip: requirements=requirements.txt
@@ -95,6 +81,7 @@
       tags:
         - configuration
 
+    # production servers probably have a real ssl cert
     - name: create self-signed ssl cert
       command: openssl req -new -nodes -x509 -subj "/C=US/ST=Colorado/L=Golden/O=IT/CN={{ nginx_server }}" -days 3650 -keyout {{ app_path }}/certs/server.key -out {{ app_path }}/certs/server.crt -extensions v3_ca creates={{ app_path }}/certs/server.crt
       notify:
