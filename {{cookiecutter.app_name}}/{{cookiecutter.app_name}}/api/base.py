@@ -20,6 +20,7 @@ from flask.ext.restful.representations.json import output_json
 from flask.ext.restful.reqparse import RequestParser
 from flask.ext.restful.utils import unpack
 from functools import wraps
+from werkzeug.http import parse_options_header
 
 # Monkey-patch flask.ext.restful.representations.json.settings to always
 # return indented and sorted JSONs.
@@ -153,7 +154,8 @@ def enforce_json_post_put_patch_requests():
     'application/json' or else a 415 - Unsupported Media Type is returned.
     """
     options = request_options.parse_args()
-    content_json = options.get('Content-Type') == 'application/json'
+    content_type, options = parse_options_header(options.get("Content-Type"))
+    content_json = content_type == 'application/json'
     post_put_or_patch = request.method.lower() in ['post', 'put', 'patch']
     if post_put_or_patch and not content_json:
         abort(415)
