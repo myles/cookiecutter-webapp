@@ -37,7 +37,7 @@ require ['backbone', 'module'], (Backbone, module) ->
     retry.error = (args...) ->
       console.log "error in retry ajax call"
       console.log "calling original error handler with retry"
-      on_error(args..., 'retry')
+      on_error?(args..., 'retry')
     $.ajax settings.url,
       type: 'POST'
       data: {}
