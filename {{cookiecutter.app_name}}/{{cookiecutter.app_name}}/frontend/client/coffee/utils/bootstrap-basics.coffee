@@ -1,5 +1,9 @@
 require ['bootstrap', 'jquery'], (Bootstrap, $) ->
 
+  # disable ajax cache - big problem with ie
+  $.ajaxSetup( cache: false )
+
+  # enable dropdown menus
   $('.dropdown-toggle').dropdown()
 
   $('a[href="#"]').click (e) ->
