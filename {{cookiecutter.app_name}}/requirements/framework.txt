@@ -8,6 +8,9 @@ itsdangerous>=0.24
 # Celery
 celery>=3.1.12
 
+# PyYaml
+pyyaml>=3.11
+
 # Database
 Flask-SQLAlchemy>=1.0
 SQLAlchemy>=0.9.4
@@ -17,45 +20,40 @@ psycopg2>=2.5.2
 Flask-Migrate>=1.0.0
 
 # Forms
-Flask-WTF>=0.9.5
-WTForms>=2.0
+Flask-WTF==0.9.5
+WTForms==2.0
 
 # API
-Flask-RESTful>=0.2.12
-Flask-Restless>=0.13.1
+Flask-RESTful==0.2.12
+Flask-Restless==0.13.1
 
 # Assets
-Flask-Assets>=0.8
-cssmin>=0.1.4
-jsmin>=2.0.4
+Flask-Assets==0.8
+cssmin==0.1.4
+jsmin==2.0.4
 
 # Views
-# Flask-Classy>=0.6.10
+# Flask-Classy==0.6.10
 -e git+https://github.com/ryanolson/flask-classy.git#egg=Flask-Classy-devel
 
 # Mail
-Flask-Mail>=0.9.0
+Flask-Mail==0.9.0
 
 # Auth
-Flask-Security>=1.7.3
+Flask-Security==1.7.3
 -e git+https://github.com/ryanolson/flask-jwt.git#egg=Flask-JWT-devel
 passlib>=1.6.2
 py-bcrypt>=0.4
 
 # Caching
-Flask-Cache>=0.12
+Flask-Cache==0.12
 
 # Management script
-Flask-Script>=2.0.5
-
-# Deployment
-wsgiref>=0.1.2
+Flask-Script==2.0.5
 
 # Error Handling
-raven>=5.0.0
+raven==5.0.0
 
 # Debug toolbar
 Flask-DebugToolbar==0.9.0
 
-# PyYaml
-pyyaml>=3.11
