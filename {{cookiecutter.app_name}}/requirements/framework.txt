@@ -29,8 +29,8 @@ Flask-Restless==0.13.1
 
 # Assets
 Flask-Assets==0.8
-cssmin==0.1.4
-jsmin==2.0.4
+cssmin>=0.1.4
+jsmin>=2.0.4
 
 # Views
 # Flask-Classy==0.6.10
