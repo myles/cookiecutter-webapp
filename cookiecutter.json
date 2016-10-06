@@ -3,6 +3,7 @@
   "AppName": "WebApp",
   "project_name": "My Webapp",
   "app_url": "https://webapp.com",
+  "app_repo": "https://github.com/ryanolson/webapp",
   "author": "Ryan Olson",
   "email": "rmolson@gmail.com",
   "company": "Quantum Coding LLC",
